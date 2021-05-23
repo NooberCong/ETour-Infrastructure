@@ -26,7 +26,7 @@ namespace Infrastructure.InterfaceImpls
 
         public Task<Itinerary> DeleteAsync(Itinerary entity)
         {
-            _dbContext.Remove(entity);
+            _dbContext.Itineraries.Remove(entity);
             return Task.FromResult(entity);
         }
 

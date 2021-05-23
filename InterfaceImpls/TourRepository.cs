@@ -30,7 +30,7 @@ namespace Infrastructure.InterfaceImpls
             return entity;
         }
 
-        public async Task<Tour> FirstOrDefaultAsync(int key)
+        public async Task<Tour> FindAsync(int key)
         {
             return await _dbContext.Tours.FindAsync(key);
         }
@@ -58,7 +58,7 @@ namespace Infrastructure.InterfaceImpls
 
         public Task<Tour> UpdateAsync(Tour entity)
         {
-            _dbContext.Update(entity);
+            _dbContext.Tours.Update(entity);
             return Task.FromResult(entity);
         }
     }
