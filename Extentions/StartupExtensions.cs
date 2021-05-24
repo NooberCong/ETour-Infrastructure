@@ -12,13 +12,25 @@ namespace Infrastructure.Extentions
         {
             services.AddScoped<ETourDbContext>();
             services.AddScoped<ITourRepository, TourRepository>();
+            services.AddScoped<ITripRepository, TripRepository>();
+            services.AddScoped<IItineraryRepository, ItineraryRepository>();
+            services.AddScoped<IPostRepository<Post, Employee>, PostRepository>();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<IBookingRepository, BookingRepository>();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<IAnswerRepository, AnswerRepository>();
+            services.AddScoped<ILogRepository, LogRepository>();
+            services.AddScoped<IDiscountRepository, DiscountRepository>();
+            services.AddScoped<ITourReviewRepository, TourReviewRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;
         }
 
         public static IServiceCollection AddEmailService(this IServiceCollection services)
         {
-            return services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IEmailComposer, EmailComposer>();
+            return services;
         }
 
         public static IdentityBuilder AddEmployeesIdentity(this IServiceCollection services, Action<IdentityOptions> setup = default(Action<IdentityOptions>))
