@@ -2,6 +2,7 @@
 using Core.Interfaces;
 using Infrastructure.InterfaceImpls;
 using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace Infrastructure.Extentions
 {
@@ -15,10 +16,16 @@ namespace Infrastructure.Extentions
             return services;
         }
 
-        public static IServiceCollection AddEmployeesIdentity(this IServiceCollection services)
+        public static IServiceCollection AddEmailService(this IServiceCollection services)
         {
-            services.AddIdentity<Employee, IdentityRole>().AddEntityFrameworkStores<ETourDbContext>();
-            return services;
+            return services.AddTransient<IEmailService, EmailService>();
+        }
+
+        public static IdentityBuilder AddEmployeesIdentity(this IServiceCollection services, Action<IdentityOptions> setup = default(Action<IdentityOptions>))
+        {
+            return services.AddIdentity<Employee, IdentityRole>(setup)
+                .AddEntityFrameworkStores<ETourDbContext>()
+                .AddDefaultTokenProviders();
         }
 
         public static void AddAzureStorage(this IServiceCollection services)

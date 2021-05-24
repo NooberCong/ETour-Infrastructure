@@ -12,9 +12,8 @@ namespace Infrastructure.InterfaceImpls
     public class Employee : IdentityUser, IEmployee
     {
         [NotMapped]
-        public string ID { get => this.Id; set => Id = value; }
-        [NotMapped]
-        public string Name { get => UserName; set => UserName = value; }
+        public string ID { get => Id; set => Id = value; }
+        public string FullName { get; set; }
         public DateTime DOB { get; set; }
         public DateTime StartWork { get; set; }
     }
