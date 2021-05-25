@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructure.InterfaceImpls
@@ -18,14 +17,16 @@ namespace Infrastructure.InterfaceImpls
             _dbContext = dbContext;
         }
 
-        public Task<Customer> AddAsync(Customer entity)
+        public async Task<Customer> AddAsync(Customer entity)
         {
-            throw new NotImplementedException();
+            await _dbContext.Customers.AddAsync(entity);
+            return entity;
         }
 
         public Task<Customer> DeleteAsync(Customer entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Customers.Remove(entity);
+            return Task.FromResult(entity);
         }
 
         public async Task<Customer> FindAsync(string key)

@@ -19,6 +19,7 @@ namespace Infrastructure.Extentions
             services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IAnswerRepository, AnswerRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<IDiscountRepository, DiscountRepository>();
             services.AddScoped<ITourReviewRepository, TourReviewRepository>();
