@@ -429,6 +429,9 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("ID");
 
                     b.HasIndex("AuthorId");
@@ -614,7 +617,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Entities.TourReview", b =>
                 {
                     b.HasOne("Core.Entities.Customer", "Author")
-                        .WithMany("Reviews")
+                        .WithMany()
                         .HasForeignKey("AuthorID");
 
                     b.HasOne("Core.Entities.Tour", null)
@@ -710,11 +713,6 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Core.Entities.Customer", b =>
-                {
-                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("Core.Entities.Question", b =>

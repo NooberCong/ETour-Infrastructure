@@ -9,6 +9,7 @@ namespace Infrastructure.InterfaceImpls
 {
     public class Post : IPost<Employee>
     {
+        public string Title { get; set; }
         public string Content { get; set; }
         public string CoverImgUrl { get; set; }
         public int ID { get; set; }
