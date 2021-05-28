@@ -18,6 +18,8 @@ namespace Infrastructure.InterfaceImpls
             _dbContext = dbContext;
         }
 
+        public IQueryable<TourReview> Queryable => _dbContext.Reviews.AsQueryable();
+
         public async Task<TourReview> AddAsync(TourReview entity)
         {
             await _dbContext.Reviews.AddAsync(entity);

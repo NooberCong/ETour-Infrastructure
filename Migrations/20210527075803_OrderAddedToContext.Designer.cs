@@ -4,14 +4,16 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ETourDbContext))]
-    partial class ETourDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210527075803_OrderAddedToContext")]
+    partial class OrderAddedToContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,7 +196,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CustomerID")
+                    b.Property<int>("CustomerID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CustomerID1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("DateOrdered")
@@ -203,12 +208,15 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
 
+                    b.Property<string>("PaymentType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("TotalPaid")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("CustomerID");
+                    b.HasIndex("CustomerID1");
 
                     b.ToTable("Orders");
                 });
@@ -332,9 +340,6 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsOpen")
-                        .HasColumnType("bit");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -353,17 +358,24 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.TripDiscount", b =>
                 {
-                    b.Property<int>("TripID")
-                        .HasColumnType("int");
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("DiscountID")
                         .HasColumnType("int");
 
-                    b.HasKey("TripID", "DiscountID");
+                    b.Property<int>("TripID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
 
                     b.HasIndex("DiscountID");
 
-                    b.ToTable("TripDiscounts");
+                    b.HasIndex("TripID");
+
+                    b.ToTable("TripDiscount");
                 });
 
             modelBuilder.Entity("Infrastructure.InterfaceImpls.Employee", b =>
@@ -640,7 +652,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Core.Entities.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerID");
+                        .HasForeignKey("CustomerID1");
 
                     b.Navigation("Customer");
                 });

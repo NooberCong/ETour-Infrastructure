@@ -18,6 +18,8 @@ namespace Infrastructure.InterfaceImpls
             _dbContext = dbContext;
         }
 
+        public IQueryable<Question> Queryable => _dbContext.Questions.AsQueryable();
+
         public async Task<Question> AddAsync(Question entity)
         {
             await _dbContext.Questions.AddAsync(entity);

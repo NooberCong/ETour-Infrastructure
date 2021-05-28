@@ -4,14 +4,16 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ETourDbContext))]
-    partial class ETourDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210527034307_JoinTableForTripDiscount")]
+    partial class JoinTableForTripDiscount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,17 +60,14 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
+                    b.Property<string>("BookerID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("OrderID")
-                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -78,7 +77,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("OrderID");
+                    b.HasIndex("BookerID");
 
                     b.HasIndex("TripID");
 
@@ -185,32 +184,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Logs");
-                });
-
-            modelBuilder.Entity("Core.Entities.Order", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CustomerID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("DateOrdered")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsPaid")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("TotalPaid")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("CustomerID");
-
-                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Core.Entities.Question", b =>
@@ -332,9 +305,6 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsOpen")
-                        .HasColumnType("bit");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -353,17 +323,24 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.TripDiscount", b =>
                 {
-                    b.Property<int>("TripID")
-                        .HasColumnType("int");
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("DiscountID")
                         .HasColumnType("int");
 
-                    b.HasKey("TripID", "DiscountID");
+                    b.Property<int>("TripID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
 
                     b.HasIndex("DiscountID");
 
-                    b.ToTable("TripDiscounts");
+                    b.HasIndex("TripID");
+
+                    b.ToTable("TripDiscount");
                 });
 
             modelBuilder.Entity("Infrastructure.InterfaceImpls.Employee", b =>
@@ -600,7 +577,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("Tokens");
+                    b.ToTable("AspNetUserTokens");
                 });
 
             modelBuilder.Entity("Core.Entities.Answer", b =>
@@ -614,15 +591,17 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Booking", b =>
                 {
-                    b.HasOne("Core.Entities.Order", null)
-                        .WithMany("Bookings")
-                        .HasForeignKey("OrderID");
+                    b.HasOne("Core.Entities.Customer", "Booker")
+                        .WithMany()
+                        .HasForeignKey("BookerID");
 
                     b.HasOne("Core.Entities.Trip", "Trip")
                         .WithMany()
                         .HasForeignKey("TripID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Booker");
 
                     b.Navigation("Trip");
                 });
@@ -634,15 +613,6 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("TripID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Core.Entities.Order", b =>
-                {
-                    b.HasOne("Core.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerID");
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Core.Entities.Question", b =>
@@ -762,11 +732,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Entities.Discount", b =>
                 {
                     b.Navigation("TripDiscounts");
-                });
-
-            modelBuilder.Entity("Core.Entities.Order", b =>
-                {
-                    b.Navigation("Bookings");
                 });
 
             modelBuilder.Entity("Core.Entities.Question", b =>

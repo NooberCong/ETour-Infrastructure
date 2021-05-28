@@ -18,6 +18,8 @@ namespace Infrastructure.InterfaceImpls
             _dbContext = dbContext;
         }
 
+        public IQueryable<Log> Queryable => _dbContext.Logs.AsQueryable();
+
         public async Task<Log> AddAsync(Log entity)
         {
             await _dbContext.Logs.AddAsync(entity);

@@ -4,11 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure
 {
@@ -20,7 +16,10 @@ namespace Infrastructure
         public DbSet<Itinerary> Itineraries { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<TourReview> Reviews { get; set; }
+
+        public DbSet<TripDiscount> TripDiscounts { get; set; }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Order> Orders { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Discount> Discounts { get; set; }
@@ -30,13 +29,25 @@ namespace Infrastructure
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Server=localhost;Database=ETourDb;Integrated Security=True;MultipleActiveResultSets=true");
+
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            {
+                optionsBuilder.UseSqlServer("Data Source=tcp:etourdbdbserver.database.windows.net,1433;Initial Catalog=ETourDb;User Id=NooberCong@etourdbdbserver;Password=Singb@2001");
+            }
+            else
+            {
+                optionsBuilder.UseSqlServer("Server=localhost;Database=ETourDb;Integrated Security=True;MultipleActiveResultSets=true");
+            }
+
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<TripDiscount>().HasKey(td => new { td.TripID, td.DiscountID });
+
             modelBuilder.Entity<Tour>()
                 .Property(tour => tour.ImageUrls)
                 .HasConversion(
@@ -50,6 +61,7 @@ namespace Infrastructure
             modelBuilder.Entity<IdentityUserRole<string>>().ToTable("EmployeeRole");
             modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("EmployeeClaims");
             modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("EmployeeLogins");
+            modelBuilder.Entity<IdentityUserToken<string>>().ToTable("Tokens");
         }
     }
 }

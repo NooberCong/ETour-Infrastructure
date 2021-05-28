@@ -17,6 +17,8 @@ namespace Infrastructure.InterfaceImpls
             _dbContext = dbContext;
         }
 
+        public IQueryable<Tour> Queryable => _dbContext.Tours.AsQueryable();
+
         public async Task<Tour> AddAsync(Tour entity)
         {
             await _dbContext.Tours.AddAsync(entity);

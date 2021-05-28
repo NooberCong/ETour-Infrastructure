@@ -18,6 +18,8 @@ namespace Infrastructure.InterfaceImpls
             _dbContext = dbContext;
         }
 
+        public IQueryable<Booking> Queryable => _dbContext.Bookings.AsQueryable();
+
         public async Task<Booking> AddAsync(Booking entity)
         {
             await _dbContext.Bookings.AddAsync(entity);

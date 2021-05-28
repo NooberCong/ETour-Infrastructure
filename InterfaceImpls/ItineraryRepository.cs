@@ -18,6 +18,8 @@ namespace Infrastructure.InterfaceImpls
             _dbContext = dbContext;
         }
 
+        public IQueryable<Itinerary> Queryable => _dbContext.Itineraries.AsQueryable();
+
         public async Task<Itinerary> AddAsync(Itinerary entity)
         {
             await _dbContext.AddAsync(entity);

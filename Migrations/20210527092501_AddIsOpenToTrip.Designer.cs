@@ -4,14 +4,16 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ETourDbContext))]
-    partial class ETourDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210527092501_AddIsOpenToTrip")]
+    partial class AddIsOpenToTrip
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -353,17 +355,24 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.TripDiscount", b =>
                 {
-                    b.Property<int>("TripID")
-                        .HasColumnType("int");
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("DiscountID")
                         .HasColumnType("int");
 
-                    b.HasKey("TripID", "DiscountID");
+                    b.Property<int>("TripID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
 
                     b.HasIndex("DiscountID");
 
-                    b.ToTable("TripDiscounts");
+                    b.HasIndex("TripID");
+
+                    b.ToTable("TripDiscount");
                 });
 
             modelBuilder.Entity("Infrastructure.InterfaceImpls.Employee", b =>

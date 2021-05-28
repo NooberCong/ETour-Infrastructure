@@ -18,6 +18,8 @@ namespace Infrastructure.InterfaceImpls
             _dbContext = dbContext;
         }
 
+        public IQueryable<Discount> Queryable => _dbContext.Discounts.AsQueryable();
+
         public async Task<Discount> AddAsync(Discount entity)
         {
             await _dbContext.Discounts.AddAsync(entity);
@@ -28,6 +30,11 @@ namespace Infrastructure.InterfaceImpls
         {
             _dbContext.Discounts.Remove(entity);
             return Task.FromResult(entity);
+        }
+
+        public async Task<Discount> FindAsync(int key)
+        {
+            return await _dbContext.Discounts.FindAsync(key);
         }
 
         public int PageCount(int pageSize)

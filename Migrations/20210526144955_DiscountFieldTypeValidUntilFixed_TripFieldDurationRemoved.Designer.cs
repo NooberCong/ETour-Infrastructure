@@ -4,14 +4,16 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ETourDbContext))]
-    partial class ETourDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210526144955_DiscountFieldTypeValidUntilFixed_TripFieldDurationRemoved")]
+    partial class DiscountFieldTypeValidUntilFixed_TripFieldDurationRemoved
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,17 +60,14 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
+                    b.Property<string>("BookerID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("OrderID")
-                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -78,7 +77,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("OrderID");
+                    b.HasIndex("BookerID");
 
                     b.HasIndex("TripID");
 
@@ -185,32 +184,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Logs");
-                });
-
-            modelBuilder.Entity("Core.Entities.Order", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CustomerID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("DateOrdered")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsPaid")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("TotalPaid")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("CustomerID");
-
-                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Core.Entities.Question", b =>
@@ -332,9 +305,6 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsOpen")
-                        .HasColumnType("bit");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -351,19 +321,19 @@ namespace Infrastructure.Migrations
                     b.ToTable("Trips");
                 });
 
-            modelBuilder.Entity("Core.Entities.TripDiscount", b =>
+            modelBuilder.Entity("DiscountTrip", b =>
                 {
-                    b.Property<int>("TripID")
+                    b.Property<int>("DiscountsID")
                         .HasColumnType("int");
 
-                    b.Property<int>("DiscountID")
+                    b.Property<int>("TripsAppliedID")
                         .HasColumnType("int");
 
-                    b.HasKey("TripID", "DiscountID");
+                    b.HasKey("DiscountsID", "TripsAppliedID");
 
-                    b.HasIndex("DiscountID");
+                    b.HasIndex("TripsAppliedID");
 
-                    b.ToTable("TripDiscounts");
+                    b.ToTable("DiscountTrip");
                 });
 
             modelBuilder.Entity("Infrastructure.InterfaceImpls.Employee", b =>
@@ -600,7 +570,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("Tokens");
+                    b.ToTable("AspNetUserTokens");
                 });
 
             modelBuilder.Entity("Core.Entities.Answer", b =>
@@ -614,15 +584,17 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Booking", b =>
                 {
-                    b.HasOne("Core.Entities.Order", null)
-                        .WithMany("Bookings")
-                        .HasForeignKey("OrderID");
+                    b.HasOne("Core.Entities.Customer", "Booker")
+                        .WithMany()
+                        .HasForeignKey("BookerID");
 
                     b.HasOne("Core.Entities.Trip", "Trip")
                         .WithMany()
                         .HasForeignKey("TripID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Booker");
 
                     b.Navigation("Trip");
                 });
@@ -634,15 +606,6 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("TripID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Core.Entities.Order", b =>
-                {
-                    b.HasOne("Core.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerID");
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Core.Entities.Question", b =>
@@ -680,23 +643,19 @@ namespace Infrastructure.Migrations
                     b.Navigation("Tour");
                 });
 
-            modelBuilder.Entity("Core.Entities.TripDiscount", b =>
+            modelBuilder.Entity("DiscountTrip", b =>
                 {
-                    b.HasOne("Core.Entities.Discount", "Discount")
-                        .WithMany("TripDiscounts")
-                        .HasForeignKey("DiscountID")
+                    b.HasOne("Core.Entities.Discount", null)
+                        .WithMany()
+                        .HasForeignKey("DiscountsID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Trip", "Trip")
-                        .WithMany("TripDiscounts")
-                        .HasForeignKey("TripID")
+                    b.HasOne("Core.Entities.Trip", null)
+                        .WithMany()
+                        .HasForeignKey("TripsAppliedID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Discount");
-
-                    b.Navigation("Trip");
                 });
 
             modelBuilder.Entity("Infrastructure.InterfaceImpls.Post", b =>
@@ -759,16 +718,6 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Core.Entities.Discount", b =>
-                {
-                    b.Navigation("TripDiscounts");
-                });
-
-            modelBuilder.Entity("Core.Entities.Order", b =>
-                {
-                    b.Navigation("Bookings");
-                });
-
             modelBuilder.Entity("Core.Entities.Question", b =>
                 {
                     b.Navigation("Answers");
@@ -784,8 +733,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Entities.Trip", b =>
                 {
                     b.Navigation("Itineraries");
-
-                    b.Navigation("TripDiscounts");
                 });
 #pragma warning restore 612, 618
         }

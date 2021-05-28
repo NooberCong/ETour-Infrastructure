@@ -4,14 +4,16 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ETourDbContext))]
-    partial class ETourDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210527080137_OrderCustomerIDFixedToString")]
+    partial class OrderCustomerIDFixedToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,6 +205,9 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
 
+                    b.Property<string>("PaymentType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("TotalPaid")
                         .HasColumnType("decimal(18,2)");
 
@@ -332,9 +337,6 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsOpen")
-                        .HasColumnType("bit");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -353,17 +355,24 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.TripDiscount", b =>
                 {
-                    b.Property<int>("TripID")
-                        .HasColumnType("int");
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("DiscountID")
                         .HasColumnType("int");
 
-                    b.HasKey("TripID", "DiscountID");
+                    b.Property<int>("TripID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
 
                     b.HasIndex("DiscountID");
 
-                    b.ToTable("TripDiscounts");
+                    b.HasIndex("TripID");
+
+                    b.ToTable("TripDiscount");
                 });
 
             modelBuilder.Entity("Infrastructure.InterfaceImpls.Employee", b =>

@@ -3,6 +3,7 @@ using Core.Interfaces;
 using Infrastructure.InterfaceImpls;
 using Microsoft.AspNetCore.Identity;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Extentions
 {
@@ -23,7 +24,9 @@ namespace Infrastructure.Extentions
             services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<IDiscountRepository, DiscountRepository>();
             services.AddScoped<ITourReviewRepository, TourReviewRepository>();
+            services.AddScoped<ITripDiscountRepository, TripDiscountRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.BuildServiceProvider().GetService<ETourDbContext>().Database.Migrate();
             return services;
         }
 
@@ -34,7 +37,7 @@ namespace Infrastructure.Extentions
             return services;
         }
 
-        public static IdentityBuilder AddEmployeesIdentity(this IServiceCollection services, Action<IdentityOptions> setup = default(Action<IdentityOptions>))
+        public static IdentityBuilder AddEmployeesIdentity(this IServiceCollection services, Action<IdentityOptions> setup = default)
         {
             return services.AddIdentity<Employee, IdentityRole>(setup)
                 .AddEntityFrameworkStores<ETourDbContext>()
