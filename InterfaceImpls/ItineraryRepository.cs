@@ -32,6 +32,11 @@ namespace Infrastructure.InterfaceImpls
             return Task.FromResult(entity);
         }
 
+        public async Task<Itinerary> FindAsync(int key)
+        {
+            return await _dbContext.Itineraries.FindAsync(key);
+        }
+
         public IEnumerable<Itinerary> QueryFiltered(Expression<Func<Itinerary, bool>> filterExpression)
         {
             return _dbContext.Itineraries.Where(filterExpression).ToArray();

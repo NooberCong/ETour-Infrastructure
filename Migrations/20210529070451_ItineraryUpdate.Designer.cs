@@ -4,14 +4,16 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ETourDbContext))]
-    partial class ETourDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210529070451_ItineraryUpdate")]
+    partial class ItineraryUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,8 +155,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Detail")
                         .IsRequired()
-                        .HasMaxLength(2147483647)
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
 
                     b.Property<string>("ImageUrls")
                         .HasColumnType("nvarchar(max)");
@@ -163,9 +165,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -654,13 +653,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Itinerary", b =>
                 {
-                    b.HasOne("Core.Entities.Trip", "Trip")
+                    b.HasOne("Core.Entities.Trip", null)
                         .WithMany("Itineraries")
                         .HasForeignKey("TripID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Trip");
                 });
 
             modelBuilder.Entity("Core.Entities.Order", b =>

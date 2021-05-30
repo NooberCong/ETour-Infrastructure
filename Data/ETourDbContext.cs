@@ -55,6 +55,13 @@ namespace Infrastructure
                     v => v.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList()
                 );
 
+            modelBuilder.Entity<Itinerary>()
+                .Property(itin => itin.ImageUrls)
+                .HasConversion(
+                    v => string.Join(",", v),
+                    v => v.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList()
+                );
+
             modelBuilder.Entity<Employee>().ToTable("Employees");
             modelBuilder.Entity<IdentityRole>().ToTable("Roles");
             modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
