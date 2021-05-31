@@ -52,9 +52,15 @@ namespace Infrastructure.InterfaceImpls
             return $"{Path.GetRandomFileName()}.{mimetype}";
         }
 
-        private (string accountName, string imageContainer ,string accountKey) GetAzureStorageConfig()
+        private (string accountName, string imageContainer, string accountKey) GetAzureStorageConfig()
         {
             return (_configuration["AccountName"], _configuration["ImageContainer"], _configuration["AccountKey"]);
+        }
+
+        public bool IsHostedFile(string fileUrl)
+        {
+            var (accountName, imageContainer, _) = GetAzureStorageConfig();
+            return fileUrl.StartsWith($"https://{accountName}.blob.core.windows.net/{imageContainer}/");
         }
     }
 }

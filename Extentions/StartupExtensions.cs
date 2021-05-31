@@ -25,6 +25,7 @@ namespace Infrastructure.Extentions
             services.AddScoped<IDiscountRepository, DiscountRepository>();
             services.AddScoped<ITourReviewRepository, TourReviewRepository>();
             services.AddScoped<ITripDiscountRepository, TripDiscountRepository>();
+            services.AddScoped<IETourLogger, ETourLogger>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.BuildServiceProvider().GetService<ETourDbContext>().Database.Migrate();
             return services;
