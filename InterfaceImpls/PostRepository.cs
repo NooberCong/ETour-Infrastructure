@@ -40,6 +40,11 @@ namespace Infrastructure.InterfaceImpls
             return (int)Math.Ceiling((decimal)_dbContext.Posts.Count() / pageSize);
         }
 
+        public int PageCount(Expression<Func<Post, bool>> filterExpression, int pageSize)
+        {
+            return (int)Math.Ceiling((decimal)_dbContext.Posts.Where(filterExpression).Count() / pageSize);
+        }
+
         public IEnumerable<Post> QueryFiltered(Expression<Func<Post, bool>> filterExpression)
         {
             return _dbContext.Posts.Where(filterExpression).ToArray();

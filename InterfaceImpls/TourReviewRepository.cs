@@ -37,6 +37,11 @@ namespace Infrastructure.InterfaceImpls
             return (int)Math.Ceiling((decimal)_dbContext.Reviews.Count() / pageSize);
         }
 
+        public int PageCount(Expression<Func<TourReview, bool>> filterExpression, int pageSize)
+        {
+            return (int)Math.Ceiling((decimal)_dbContext.Reviews.Where(filterExpression).Count() / pageSize);
+        }
+
         public IEnumerable<TourReview> QueryFiltered(Expression<Func<TourReview, bool>> filterExpression)
         {
             return _dbContext.Reviews.Where(filterExpression).ToArray();

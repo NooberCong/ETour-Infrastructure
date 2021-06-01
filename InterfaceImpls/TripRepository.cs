@@ -30,9 +30,29 @@ namespace Infrastructure.InterfaceImpls
             return await _dbContext.Trips.FindAsync(key);
         }
 
+        public int PageCount(int pageSize)
+        {
+            return (int)Math.Ceiling((decimal)_dbContext.Trips.Count() / pageSize);
+        }
+
+        public int PageCount(Expression<Func<Trip, bool>> filterExpression, int pageSize)
+        {
+            return (int)Math.Ceiling((decimal)_dbContext.Trips.Where(filterExpression).Count() / pageSize);
+        }
+
         public IEnumerable<Trip> QueryFiltered(Expression<Func<Trip, bool>> filterExpression)
         {
             return _dbContext.Trips.Where(filterExpression).ToArray();
+        }
+
+        public IEnumerable<Trip> QueryFilteredPaged(Expression<Func<Trip, bool>> filterExpression, int pageNumber, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Trip> QueryPaged(int pageNumber, int pageSize)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<Trip> UpdateAsync(Trip entity)

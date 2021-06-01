@@ -31,6 +31,11 @@ namespace Infrastructure.InterfaceImpls
             return (int)Math.Ceiling((decimal)_dbContext.Bookings.Count() / pageSize);
         }
 
+        public int PageCount(Expression<Func<Booking, bool>> filterExpression, int pageSize)
+        {
+            return (int)Math.Ceiling((decimal)_dbContext.Bookings.Where(filterExpression).Count() / pageSize);
+        }
+
         public IEnumerable<Booking> QueryFiltered(Expression<Func<Booking, bool>> filterExpression)
         {
             return _dbContext.Bookings.Where(filterExpression).ToArray();

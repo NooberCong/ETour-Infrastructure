@@ -42,6 +42,11 @@ namespace Infrastructure.InterfaceImpls
             return (int)Math.Ceiling((decimal)_dbContext.Discounts.Count() / pageSize);
         }
 
+        public int PageCount(Expression<Func<Discount, bool>> filterExpression, int pageSize)
+        {
+            return (int)Math.Ceiling((decimal)_dbContext.Discounts.Where(filterExpression).Count() / pageSize);
+        }
+
         public IEnumerable<Discount> QueryFiltered(Expression<Func<Discount, bool>> filterExpression)
         {
             return _dbContext.Discounts.Where(filterExpression).ToArray();

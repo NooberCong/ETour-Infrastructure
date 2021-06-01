@@ -31,19 +31,24 @@ namespace Infrastructure.InterfaceImpls
             return (int)Math.Ceiling((decimal)_dbContext.Logs.Count() / pageSize);
         }
 
+        public int PageCount(Expression<Func<Log, bool>> filterExpression, int pageSize)
+        {
+            return (int)Math.Ceiling((decimal)_dbContext.Logs.Where(filterExpression).Count() / pageSize);
+        }
+
         public IEnumerable<Log> QueryFiltered(Expression<Func<Log, bool>> filterExpression)
         {
-            return _dbContext.Logs.Where(filterExpression).ToArray();
+            return _dbContext.Logs.OrderBy(l => l.LastUpdated).Reverse().Where(filterExpression).ToArray();
         }
 
         public IEnumerable<Log> QueryFilteredPaged(Expression<Func<Log, bool>> filterExpression, int pageNumber, int pageSize)
         {
-            return _dbContext.Logs.Where(filterExpression).Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
+            return _dbContext.Logs.OrderBy(l => l.LastUpdated).Reverse().Where(filterExpression).Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
         }
 
         public IEnumerable<Log> QueryPaged(int pageNumber, int pageSize)
         {
-            return _dbContext.Logs.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
+            return _dbContext.Logs.OrderBy(l => l.LastUpdated).Reverse().Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
         }
     }
 }
