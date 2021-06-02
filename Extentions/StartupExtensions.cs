@@ -4,6 +4,8 @@ using Infrastructure.InterfaceImpls;
 using Microsoft.AspNetCore.Identity;
 using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
+using Infrastructure.Hubs;
 
 namespace Infrastructure.Extentions
 {
@@ -24,6 +26,7 @@ namespace Infrastructure.Extentions
             services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<IDiscountRepository, DiscountRepository>();
             services.AddScoped<ITourReviewRepository, TourReviewRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<ITripDiscountRepository, TripDiscountRepository>();
             services.AddScoped<IETourLogger, ETourLogger>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
