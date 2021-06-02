@@ -4,14 +4,16 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ETourDbContext))]
-    partial class ETourDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210602103903_RewardPoint")]
+    partial class RewardPoint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,9 +127,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("ValidFrom")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("ValidUntil")
                         .HasColumnType("datetime2");
@@ -408,7 +407,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("DiscountID");
 
-                    b.ToTable("TripDiscount");
+                    b.ToTable("TripDiscounts");
                 });
 
             modelBuilder.Entity("Infrastructure.InterfaceImpls.Employee", b =>

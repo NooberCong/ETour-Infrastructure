@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,10 +20,15 @@ namespace Infrastructure.InterfaceImpls
 
         public IQueryable<Trip> Queryable => _dbContext.Trips.AsQueryable();
 
-        public async Task<Trip> AddAsync(Trip entity)
+        public async Task<Trip> AddAsync(Trip trip, int[] discountIDs)
         {
-            await _dbContext.Trips.AddAsync(entity);
-            return entity;
+            foreach (var discountID in discountIDs)
+            {
+                _dbContext.Entry(new TripDiscount { TripID = trip.ID, DiscountID = discountID }).State = EntityState.Added;
+            }
+
+            await _dbContext.Trips.AddAsync(trip);
+            return trip;
         }
 
         public async Task<Trip> FindAsync(int key)
@@ -59,6 +65,28 @@ namespace Infrastructure.InterfaceImpls
         {
             _dbContext.Trips.Update(entity);
             return Task.FromResult(entity);
+        }
+
+        public async Task<Trip> UpdateAsync(Trip trip, int[] discountIDs)
+        {
+            Trip existingTrip = await _dbContext.Trips
+                            .Include(tr => tr.Tour)
+                            .Include(tr => tr.TripDiscounts)
+                            .FirstOrDefaultAsync(t => t.ID == trip.ID);
+
+            foreach (var tripDisc in existingTrip.TripDiscounts)
+            {
+                tripDisc.Trip = trip;
+                _dbContext.Entry(tripDisc).State = EntityState.Deleted;
+            }
+
+            foreach (var discountID in discountIDs)
+            {
+                _dbContext.Entry(new TripDiscount { DiscountID = discountID, TripID = trip.ID }).State = EntityState.Added;
+            }
+
+            _dbContext.Trips.Update(trip);
+            return trip;
         }
     }
 }

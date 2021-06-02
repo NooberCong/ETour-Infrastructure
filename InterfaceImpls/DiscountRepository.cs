@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,6 +67,16 @@ namespace Infrastructure.InterfaceImpls
         {
             _dbContext.Discounts.Update(entity);
             return Task.FromResult(entity);
+        }
+
+        public void UpdateTripApplications(Discount discount, int[] tripIDs)
+        {
+            var tripDiscountsToDelete = discount.TripDiscounts.Where(td => !tripIDs.Contains(td.Trip.ID));
+
+            foreach (var tripDisc in tripDiscountsToDelete)
+            {
+                _dbContext.Entry(tripDisc).State = EntityState.Deleted;
+            }
         }
     }
 }

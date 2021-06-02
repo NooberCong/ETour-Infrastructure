@@ -16,5 +16,6 @@ namespace Infrastructure.InterfaceImpls
         public bool IsDeleted { get; set; }
         public DateTime LastUpdated { get; set; }
         public Employee Author { get; set; }
+        public string AuthorID { get; set; }
     }
 }

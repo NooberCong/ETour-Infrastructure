@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +10,31 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.InterfaceImpls
 {
+
     class TourRepository : ITourRepository
     {
         private readonly ETourDbContext _dbContext;
-        public TourRepository(ETourDbContext dbContext)
+        private readonly IRemoteFileStorageHandler _remoteFileStorageHandler;
+        public TourRepository(ETourDbContext dbContext, IRemoteFileStorageHandler remoteFileStorageHandler)
         {
             _dbContext = dbContext;
+            _remoteFileStorageHandler = remoteFileStorageHandler;
         }
 
         public IQueryable<Tour> Queryable => _dbContext.Tours.AsQueryable();
 
-        public async Task<Tour> AddAsync(Tour entity)
+        public async Task<Tour> AddAsync(Tour tour, IFormFileCollection images)
         {
-            await _dbContext.Tours.AddAsync(entity);
-            return entity;
+            foreach (var file in images.AsEnumerable())
+            {
+                using var stream = file.OpenReadStream();
+                string url = await _remoteFileStorageHandler.UploadAsync(stream, "jpg");
+                tour.ImageUrls.Add(url);
+            }
+
+            await _dbContext.AddAsync(tour);
+
+            return tour;
         }
 
         public async Task<Tour> DeleteAsync(Tour entity)
@@ -39,7 +51,7 @@ namespace Infrastructure.InterfaceImpls
 
         public int PageCount(int pageSize)
         {
-            return (int) Math.Ceiling((decimal)_dbContext.Tours.Count() / pageSize);
+            return (int)Math.Ceiling((decimal)_dbContext.Tours.Count() / pageSize);
         }
 
         public int PageCount(Expression<Func<Tour, bool>> filterExpression, int pageSize)
@@ -62,6 +74,33 @@ namespace Infrastructure.InterfaceImpls
             return _dbContext.Tours.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
         }
 
+
+        public async Task<Tour> UpdateAsync(Tour tour, IFormFileCollection images)
+        {
+            Tour existingTour = await FindAsync(tour.ID);
+
+            if (images.Any())
+            {
+                foreach (var imageUri in existingTour.ImageUrls)
+                {
+                    await _remoteFileStorageHandler.DeleteAsync(imageUri);
+                }
+
+                foreach (var file in images.AsEnumerable())
+                {
+                    using var stream = file.OpenReadStream();
+                    string url = await _remoteFileStorageHandler.UploadAsync(stream, "jpg");
+                    tour.ImageUrls.Add(url);
+                }
+            }
+            else
+            {
+                tour.ImageUrls = existingTour.ImageUrls;
+            }
+
+            _dbContext.Tours.Update(tour);
+            return tour;
+        }
 
         public Task<Tour> UpdateAsync(Tour entity)
         {

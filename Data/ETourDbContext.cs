@@ -16,8 +16,6 @@ namespace Infrastructure
         public DbSet<Itinerary> Itineraries { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<TourReview> Reviews { get; set; }
-
-        public DbSet<TripDiscount> TripDiscounts { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Question> Questions { get; set; }
@@ -46,7 +44,8 @@ namespace Infrastructure
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<TripDiscount>().HasKey(td => new { td.TripID, td.DiscountID });
+            modelBuilder.Entity<TripDiscount>().ToTable("TripDiscount").HasKey(td => new { td.TripID, td.DiscountID });
+            modelBuilder.Entity<TourFollowing>().ToTable("TourFollowing").HasKey(td => new { td.TourID, td.CustomerID });
 
             modelBuilder.Entity<Tour>()
                 .Property(tour => tour.ImageUrls)
