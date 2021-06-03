@@ -21,7 +21,6 @@ namespace Infrastructure.Extentions
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IAnswerRepository, AnswerRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
-            services.AddScoped<IEmployeeRepository<Employee>, EmployeeRepository>();
             services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<IDiscountRepository, DiscountRepository>();
             services.AddScoped<ITourReviewRepository, TourReviewRepository>();
@@ -48,6 +47,7 @@ namespace Infrastructure.Extentions
 
         public static IdentityBuilder AddEmployeesIdentity(this IServiceCollection services, Action<IdentityOptions> setup = default)
         {
+            services.AddScoped<IEmployeeRepository<Employee>, EmployeeRepository>();
             return services.AddIdentity<Employee, IdentityRole>(setup)
                 .AddEntityFrameworkStores<ETourDbContext>()
                 .AddDefaultTokenProviders();
