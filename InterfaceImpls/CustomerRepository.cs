@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.InterfaceImpls
 {
-    class CustomerRepository : ICustomerRepository
+    public class CustomerRepository : ICustomerRepository
     {
         private readonly ETourDbContext _dbContext;
 
@@ -39,6 +39,11 @@ namespace Infrastructure.InterfaceImpls
         public int PageCount(int pageSize)
         {
             return (int)Math.Ceiling((decimal)_dbContext.Customers.Count() / pageSize);
+        }
+
+        public int PageCount(Expression<Func<Customer, bool>> filterExpression, int pageSize)
+        {
+            return (int)Math.Ceiling((decimal)_dbContext.Customers.Where(filterExpression).Count() / pageSize);
         }
 
         public IEnumerable<Customer> QueryFiltered(Expression<Func<Customer, bool>> filterExpression)

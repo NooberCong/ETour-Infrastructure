@@ -24,7 +24,7 @@ namespace Infrastructure.InterfaceImpls
         {
             foreach (var discountID in discountIDs)
             {
-                _dbContext.Entry(new TripDiscount { TripID = trip.ID, DiscountID = discountID }).State = EntityState.Added;
+                trip.TripDiscounts.Add(new TripDiscount { TripID = trip.ID, DiscountID = discountID });
             }
 
             await _dbContext.Trips.AddAsync(trip);
