@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.InterfaceImpls
 {
@@ -13,9 +11,26 @@ namespace Infrastructure.InterfaceImpls
         public string Content { get; set; }
         public string CoverImgUrl { get; set; }
         public int ID { get; set; }
-        public bool IsDeleted { get; set; }
+        public bool IsSoftDeleted { get; set; }
         public DateTime LastUpdated { get; set; }
         public Employee Author { get; set; }
         public string AuthorID { get; set; }
+        public List<string> ImageUrls { get; set; } = new();
+        public IPost<Employee>.PostCategory Category { get; set; }
+        public List<string> Tags { get; set; } = new();
+        public IEnumerable<string> GetUnusedImageUrls(List<string> newUrls)
+        {
+            return ImageUrls.Where(url => !newUrls.Contains(url));
+        }
+
+        public void Hide()
+        {
+            IsSoftDeleted = true;
+        }
+
+        public void Show()
+        {
+            IsSoftDeleted = false;
+        }
     }
 }

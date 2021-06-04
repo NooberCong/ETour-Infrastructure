@@ -61,6 +61,20 @@ namespace Infrastructure
                     v => v.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList()
                 );
 
+            modelBuilder.Entity<Post>()
+                .Property(p => p.ImageUrls)
+                .HasConversion(
+                    v => string.Join(",", v),
+                    v => v.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList()
+                );
+
+            modelBuilder.Entity<Post>()
+                .Property(p => p.Tags)
+                .HasConversion(
+                    v => string.Join(",", v),
+                    v => v.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList()
+                );
+
             modelBuilder.Entity<Employee>().ToTable("Employees");
             modelBuilder.Entity<IdentityRole>().ToTable("Roles");
             modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");

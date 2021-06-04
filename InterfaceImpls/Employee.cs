@@ -17,7 +17,6 @@ namespace Infrastructure.InterfaceImpls
         public DateTime DOB { get; set; }
         [DataType(DataType.Date)]
         public DateTime StartWork { get; set; }
-        public bool Banned { get; set; } = false;
-
+        public bool IsSoftDeleted { get; set; }
     }
 }
