@@ -4,14 +4,16 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ETourDbContext))]
-    partial class ETourDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210604131756_PointLogsReferenceAddedToCustomer")]
+    partial class PointLogsReferenceAddedToCustomer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,6 +67,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<int>("TripID")
@@ -218,29 +223,16 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ContactNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CustomerID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("DateCompleted")
+                    b.Property<DateTime>("DatePaid")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateDeposited")
-                        .HasColumnType("datetime2");
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
 
-                    b.Property<decimal?>("Deposited")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("PaymentDeadline")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("Total")
+                    b.Property<decimal>("TotalPaid")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ID");
@@ -401,9 +393,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<int>("Capacity")
                         .HasColumnType("int");
-
-                    b.Property<float>("Deposit")
-                        .HasColumnType("real");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -568,7 +557,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("Infrastructure.InterfaceImpls.Role", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -585,9 +574,6 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("Permissions")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
@@ -596,32 +582,6 @@ namespace Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "admin",
-                            ConcurrencyStamp = "23423424",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN",
-                            Permissions = "Manage accounts,View analytics"
-                        },
-                        new
-                        {
-                            Id = "customer",
-                            ConcurrencyStamp = "84938594",
-                            Name = "Customer Relation Employee",
-                            NormalizedName = "CUSTOMER RELATION EMPLOYEE",
-                            Permissions = "Manage Blog,Manage User Questions & Answers"
-                        },
-                        new
-                        {
-                            Id = "travel",
-                            ConcurrencyStamp = "34938493",
-                            Name = "Travel Employee",
-                            NormalizedName = "TRAVEL EMPLOYEE",
-                            Permissions = "Manage Tours,Manage Trips,Manage Itineraries,Manage Discounts,Manage Orders"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -697,8 +657,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("EmployeeId");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(450)");
@@ -872,7 +831,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Infrastructure.InterfaceImpls.Role", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -899,7 +858,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Infrastructure.InterfaceImpls.Role", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)

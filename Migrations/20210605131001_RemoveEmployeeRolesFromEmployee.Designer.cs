@@ -4,14 +4,16 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ETourDbContext))]
-    partial class ETourDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210605131001_RemoveEmployeeRolesFromEmployee")]
+    partial class RemoveEmployeeRolesFromEmployee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -596,32 +598,6 @@ namespace Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "admin",
-                            ConcurrencyStamp = "23423424",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN",
-                            Permissions = "Manage accounts,View analytics"
-                        },
-                        new
-                        {
-                            Id = "customer",
-                            ConcurrencyStamp = "84938594",
-                            Name = "Customer Relation Employee",
-                            NormalizedName = "CUSTOMER RELATION EMPLOYEE",
-                            Permissions = "Manage Blog,Manage User Questions & Answers"
-                        },
-                        new
-                        {
-                            Id = "travel",
-                            ConcurrencyStamp = "34938493",
-                            Name = "Travel Employee",
-                            NormalizedName = "TRAVEL EMPLOYEE",
-                            Permissions = "Manage Tours,Manage Trips,Manage Itineraries,Manage Discounts,Manage Orders"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

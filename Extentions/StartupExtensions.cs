@@ -4,29 +4,36 @@ using Infrastructure.InterfaceImpls;
 using Microsoft.AspNetCore.Identity;
 using System;
 using Microsoft.EntityFrameworkCore;
+using HtmlAgilityPack;
 
 namespace Infrastructure.Extentions
 {
     public static class StartupExtensions
     {
-        public static IServiceCollection AddDatabase(this IServiceCollection services)
+        public static IServiceCollection AddBaseDb(this IServiceCollection services)
         {
             services.AddScoped<ETourDbContext>();
             services.AddScoped<ITourRepository, TourRepository>();
             services.AddScoped<ITripRepository, TripRepository>();
-            services.AddScoped<IItineraryRepository, ItineraryRepository>();
             services.AddScoped<IPostRepository<Post, Employee>, PostRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IBookingRepository, BookingRepository>();
-            services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IAnswerRepository, AnswerRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
-            services.AddScoped<ILogRepository, LogRepository>();
-            services.AddScoped<IDiscountRepository, DiscountRepository>();
             services.AddScoped<ITourReviewRepository, TourReviewRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IRemoteFileStorageHandler, RemoteFileStorageHandler>();
+            services.AddTransient<HtmlDocument>();
             services.BuildServiceProvider().GetService<ETourDbContext>().Database.Migrate();
+            return services;
+        }
+
+        public static IServiceCollection AddCompanyDb(this IServiceCollection services)
+        {
+            services.AddScoped<ILogRepository, LogRepository>();
+            services.AddScoped<IItineraryRepository, ItineraryRepository>();
+            services.AddScoped<IDiscountRepository, DiscountRepository>();
             return services;
         }
 
@@ -48,14 +55,9 @@ namespace Infrastructure.Extentions
         public static IdentityBuilder AddEmployeesIdentity(this IServiceCollection services, Action<IdentityOptions> setup = default)
         {
             services.AddScoped<IEmployeeRepository<Employee>, EmployeeRepository>();
-            return services.AddIdentity<Employee, IdentityRole>(setup)
+            return services.AddIdentity<Employee, Role>(setup)
                 .AddEntityFrameworkStores<ETourDbContext>()
                 .AddDefaultTokenProviders();
-        }
-
-        public static void AddAzureStorage(this IServiceCollection services)
-        {
-            services.AddScoped<IRemoteFileStorageHandler, RemoteFileStorageHandler>();
         }
     }
 }
