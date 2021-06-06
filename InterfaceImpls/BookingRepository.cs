@@ -17,7 +17,16 @@ namespace Infrastructure.InterfaceImpls
         {
             _dbContext = dbContext;
         }
+        public Task<Booking> DeleteAsync(Booking entity)
+        {
+            _dbContext.Bookings.Remove(entity);
+            return Task.FromResult(entity);
+        }
 
+        public async Task<Booking> FindAsync(int key)
+        {
+            return await _dbContext.Bookings.FindAsync(key);
+        }
         public IQueryable<Booking> Queryable => _dbContext.Bookings.AsQueryable();
 
         public async Task<Booking> AddAsync(Booking entity)
