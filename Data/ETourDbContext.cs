@@ -18,7 +18,6 @@ namespace Infrastructure
         public DbSet<Customer> Customers { get; set; }
         public DbSet<TourReview> Reviews { get; set; }
         public DbSet<Booking> Bookings { get; set; }
-        public DbSet<Order> Orders { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Discount> Discounts { get; set; }
@@ -75,11 +74,6 @@ namespace Infrastructure
                     v => v.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList()
                 );
             modelBuilder.Entity<Role>().ToTable("Roles");
-            modelBuilder.Entity<Role>().HasData(
-                    new Role { Id = "admin", Name = "Admin", ConcurrencyStamp = "23423424", NormalizedName = "ADMIN", Permissions = new List<string> { "Manage accounts", "View analytics" } },
-                    new Role { Id = "customer", Name = "Customer Relation Employee", ConcurrencyStamp = "84938594", NormalizedName = "CUSTOMER RELATION EMPLOYEE", Permissions = new List<string> { "Manage Blog", "Manage User Questions & Answers" } },
-                    new Role { Id = "travel", Name = "Travel Employee", ConcurrencyStamp = "34938493", NormalizedName = "TRAVEL EMPLOYEE", Permissions = new List<string> { "Manage Tours", "Manage Trips", "Manage Itineraries", "Manage Discounts", "Manage Orders" } }
-                );
             modelBuilder.Entity<Role>()
                 .Property(r => r.Permissions)
                 .HasConversion(

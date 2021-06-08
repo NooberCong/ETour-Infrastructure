@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ETourDbContext))]
-    [Migration("20210606021451_AddSeedDataForRoles")]
-    partial class AddSeedDataForRoles
+    [Migration("20210608155824_RemoveOrder")]
+    partial class RemoveOrder
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -57,24 +57,52 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AuthorID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("DateCompleted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateDeposited")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DepositPaymentType")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Deposited")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("FullPaymentType")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<int>("OrderID")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("PaymentDeadline")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Total")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("TripID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("OrderID");
+                    b.HasIndex("AuthorID");
 
                     b.HasIndex("TripID");
 
@@ -108,6 +136,35 @@ namespace Infrastructure.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("Core.Entities.CustomerInfo", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AgeGroup")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BookingID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DOB")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Sex")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BookingID");
+
+                    b.ToTable("CustomerInfo");
                 });
 
             modelBuilder.Entity("Core.Entities.Discount", b =>
@@ -213,45 +270,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Logs");
                 });
 
-            modelBuilder.Entity("Core.Entities.Order", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ContactNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CustomerID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("DateCompleted")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateDeposited")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal?>("Deposited")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("PaymentDeadline")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("Total")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("CustomerID");
-
-                    b.ToTable("Orders");
-                });
-
             modelBuilder.Entity("Core.Entities.PointLog", b =>
                 {
                     b.Property<int>("ID")
@@ -291,14 +309,23 @@ namespace Infrastructure.Migrations
                     b.Property<string>("AuthorID")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsSoftDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -598,32 +625,6 @@ namespace Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "admin",
-                            ConcurrencyStamp = "23423424",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN",
-                            Permissions = "Manage accounts,View analytics"
-                        },
-                        new
-                        {
-                            Id = "customer",
-                            ConcurrencyStamp = "84938594",
-                            Name = "Customer Relation Employee",
-                            NormalizedName = "CUSTOMER RELATION EMPLOYEE",
-                            Permissions = "Manage Blog,Manage User Questions & Answers"
-                        },
-                        new
-                        {
-                            Id = "travel",
-                            ConcurrencyStamp = "34938493",
-                            Name = "Travel Employee",
-                            NormalizedName = "TRAVEL EMPLOYEE",
-                            Permissions = "Manage Tours,Manage Trips,Manage Itineraries,Manage Discounts,Manage Orders"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -742,11 +743,9 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Booking", b =>
                 {
-                    b.HasOne("Core.Entities.Order", "Order")
+                    b.HasOne("Core.Entities.Customer", "Author")
                         .WithMany("Bookings")
-                        .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AuthorID");
 
                     b.HasOne("Core.Entities.Trip", "Trip")
                         .WithMany("Bookings")
@@ -754,9 +753,16 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Order");
+                    b.Navigation("Author");
 
                     b.Navigation("Trip");
+                });
+
+            modelBuilder.Entity("Core.Entities.CustomerInfo", b =>
+                {
+                    b.HasOne("Core.Entities.Booking", null)
+                        .WithMany("CustomerInfos")
+                        .HasForeignKey("BookingID");
                 });
 
             modelBuilder.Entity("Core.Entities.Itinerary", b =>
@@ -768,15 +774,6 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Trip");
-                });
-
-            modelBuilder.Entity("Core.Entities.Order", b =>
-                {
-                    b.HasOne("Core.Entities.Customer", "Customer")
-                        .WithMany("Orders")
-                        .HasForeignKey("CustomerID");
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Core.Entities.PointLog", b =>
@@ -923,9 +920,14 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Core.Entities.Booking", b =>
+                {
+                    b.Navigation("CustomerInfos");
+                });
+
             modelBuilder.Entity("Core.Entities.Customer", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("Bookings");
 
                     b.Navigation("PointLogs");
 
@@ -937,11 +939,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Entities.Discount", b =>
                 {
                     b.Navigation("TripDiscounts");
-                });
-
-            modelBuilder.Entity("Core.Entities.Order", b =>
-                {
-                    b.Navigation("Bookings");
                 });
 
             modelBuilder.Entity("Core.Entities.Question", b =>
