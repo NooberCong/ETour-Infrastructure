@@ -56,6 +56,7 @@ namespace Infrastructure.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AuthorID")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("DateCompleted")
@@ -284,6 +285,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("AuthorID")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
@@ -310,6 +312,7 @@ namespace Infrastructure.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AuthorID")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Category")
@@ -401,6 +404,7 @@ namespace Infrastructure.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AuthorID")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
@@ -586,11 +590,15 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ID");
 
                     b.HasIndex("AuthorID");
+
+                    b.HasIndex("Title")
+                        .IsUnique()
+                        .HasFilter("[Title] IS NOT NULL");
 
                     b.ToTable("Posts");
                 });
@@ -743,7 +751,9 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Core.Entities.Customer", "Author")
                         .WithMany("Bookings")
-                        .HasForeignKey("AuthorID");
+                        .HasForeignKey("AuthorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Core.Entities.Trip", "Trip")
                         .WithMany("Bookings")
@@ -778,7 +788,9 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Core.Entities.Customer", "Author")
                         .WithMany("PointLogs")
-                        .HasForeignKey("AuthorID");
+                        .HasForeignKey("AuthorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Author");
                 });
@@ -787,7 +799,9 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Core.Entities.Customer", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorID");
+                        .HasForeignKey("AuthorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Author");
                 });
@@ -815,7 +829,9 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Core.Entities.Customer", "Author")
                         .WithMany("Reviews")
-                        .HasForeignKey("AuthorID");
+                        .HasForeignKey("AuthorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Core.Entities.Tour", "Tour")
                         .WithMany("Reviews")
