@@ -1,10 +1,12 @@
 ﻿using Core.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Infrastructure.InterfaceImpls
 {
+    [Index(nameof(Title), IsUnique = true)]
     public class Post : IPost<Employee>
     {
         public string Title { get; set; }
