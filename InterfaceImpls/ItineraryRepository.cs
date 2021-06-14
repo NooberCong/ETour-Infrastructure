@@ -38,6 +38,39 @@ namespace Infrastructure.InterfaceImpls
             return entity;
         }
 
+        public async Task<Itinerary> CopyTo(int tripID, Itinerary sourceItinerary)
+        {
+            Itinerary copiedItinerary = new()
+            { 
+                Detail = sourceItinerary.Detail,
+                Accommodation = sourceItinerary.Accommodation,
+                Activity = sourceItinerary.Activity,
+                Meal = sourceItinerary.Meal,
+                StartTime = sourceItinerary.StartTime,
+                Title = sourceItinerary.Title,
+                Transport = sourceItinerary.Transport,
+                TripID = tripID,
+                ImageUrls = new List<string>()
+            };
+
+            foreach (var imageUrl in sourceItinerary.ImageUrls)
+            {
+                if (_remoteFileStorageHandler.IsHostedFile(imageUrl))
+                {
+                    var copiedImageUrl = await _remoteFileStorageHandler.CopyAsync(imageUrl);
+                    copiedItinerary.ImageUrls.Add(copiedImageUrl);
+                    copiedItinerary.Detail = copiedItinerary.Detail.Replace(imageUrl, copiedImageUrl);
+                } else
+                {
+                    copiedItinerary.ImageUrls.Add(imageUrl);
+                }
+            }
+
+            await _dbContext.Itineraries.AddAsync(copiedItinerary);
+
+            return copiedItinerary;
+        }
+
         public async Task<Itinerary> DeleteAsync(Itinerary entity)
         {
             foreach (var imageUrl in entity.ImageUrls.Where(_remoteFileStorageHandler.IsHostedFile))

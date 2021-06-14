@@ -53,6 +53,26 @@ namespace Infrastructure
                     v => v.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList()
                 );
 
+            modelBuilder.Entity<Booking>()
+                .Property(booking => booking.AuthorID)
+                .IsRequired();
+
+            modelBuilder.Entity<Post>()
+                .Property(post => post.AuthorID)
+                .IsRequired();
+
+            modelBuilder.Entity<Question>()
+                .Property(question => question.AuthorID)
+                .IsRequired();
+
+            modelBuilder.Entity<PointLog>()
+                .Property(plog => plog.AuthorID)
+                .IsRequired();
+
+            modelBuilder.Entity<TourReview>()
+                .Property(review => review.AuthorID)
+                .IsRequired();
+
             modelBuilder.Entity<Itinerary>()
                 .Property(itin => itin.ImageUrls)
                 .HasConversion(

@@ -53,12 +53,12 @@ namespace Infrastructure.InterfaceImpls
 
         public IEnumerable<Trip> QueryFilteredPaged(Expression<Func<Trip, bool>> filterExpression, int pageNumber, int pageSize)
         {
-            throw new NotImplementedException();
+            return _dbContext.Trips.Where(filterExpression).Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
         }
 
         public IEnumerable<Trip> QueryPaged(int pageNumber, int pageSize)
         {
-            throw new NotImplementedException();
+            return _dbContext.Trips.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
         }
 
         public Task<Trip> UpdateAsync(Trip entity)

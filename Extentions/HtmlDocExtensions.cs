@@ -15,17 +15,21 @@ namespace Infrastructure.Extentions
         public static async Task<IEnumerable<string>> ProcessBase64Images(this HtmlDocument doc, IRemoteFileStorageHandler remoteFileStorageHandler)
         {
             List<string> uploadedImgUrls = new();
-            foreach (var img in doc.DocumentNode.SelectNodes("//img"))
+            var imgTags = doc.DocumentNode.SelectNodes("//img");
+            if (imgTags != null)
             {
-                var src = img.Attributes["src"].Value;
-                // Upload image and set src to the image url
-                if (src.StartsWith("data:image"))
+                foreach (var img in imgTags)
                 {
-                    var stream = new MemoryStream(Convert.FromBase64String(src.Split(";base64,")[1]));
-                    src = await remoteFileStorageHandler.UploadAsync(stream, "jpg");
-                    img.Attributes["src"].Value = src;
+                    var src = img.Attributes["src"].Value;
+                    // Upload image and set src to the image url
+                    if (src.StartsWith("data:image"))
+                    {
+                        var stream = new MemoryStream(Convert.FromBase64String(src.Split(";base64,")[1]));
+                        src = await remoteFileStorageHandler.UploadAsync(stream, "jpg");
+                        img.Attributes["src"].Value = src;
+                    }
+                    uploadedImgUrls.Add(src);
                 }
-                uploadedImgUrls.Add(src);
             }
             return uploadedImgUrls;
         }

@@ -22,12 +22,12 @@ namespace Infrastructure.InterfaceImpls
             string fileName = GenerateFileName(mimeType);
             var (accountName, imageContainer, accountKey) = GetAzureStorageConfig();
 
-            Uri blobUri = new Uri(
+            Uri blobUri = new(
                 $"https://{accountName}.blob.core.windows.net/{imageContainer}/{fileName}"
                 );
-            StorageSharedKeyCredential storageCredentials = new StorageSharedKeyCredential(accountName, accountKey);
+            StorageSharedKeyCredential storageCredentials = new(accountName, accountKey);
 
-            BlobClient blobClient = new BlobClient(blobUri, storageCredentials);
+            BlobClient blobClient = new(blobUri, storageCredentials);
 
             await blobClient.UploadAsync(fileStream);
 
@@ -38,16 +38,16 @@ namespace Infrastructure.InterfaceImpls
         {
             var (accountName, _, accountKey) = GetAzureStorageConfig();
 
-            Uri blobUri = new Uri(uri);
+            Uri blobUri = new(uri);
 
-            StorageSharedKeyCredential storageCredentials = new StorageSharedKeyCredential(accountName, accountKey);
+            StorageSharedKeyCredential storageCredentials = new(accountName, accountKey);
 
-            BlobClient blobClient = new BlobClient(blobUri, storageCredentials);
+            BlobClient blobClient = new(blobUri, storageCredentials);
 
             await blobClient.DeleteAsync();
         }
 
-        private string GenerateFileName(string mimetype)
+        private static string GenerateFileName(string mimetype)
         {
             return $"{Path.GetRandomFileName()}.{mimetype}";
         }
@@ -61,6 +61,32 @@ namespace Infrastructure.InterfaceImpls
         {
             var (accountName, imageContainer, _) = GetAzureStorageConfig();
             return fileUrl.StartsWith($"https://{accountName}.blob.core.windows.net/{imageContainer}/");
+        }
+
+        public async Task<string> CopyAsync(string srcUrl)
+        {
+            string fileName = GenerateFileName(GetMimeType(srcUrl));
+            var (accountName, imageContainer, accountKey) = GetAzureStorageConfig();
+
+            var blobUri = new Uri(
+                $"https://{accountName}.blob.core.windows.net/{imageContainer}/{fileName}"
+                );
+
+            var srcUri = new Uri(srcUrl);
+            
+            StorageSharedKeyCredential storageCredentials = new(accountName, accountKey);
+
+            BlobClient blobClient = new(blobUri, storageCredentials);
+
+            await blobClient.StartCopyFromUriAsync(srcUri);
+
+            return blobUri.AbsoluteUri;
+        }
+
+        private static string GetMimeType(string srcUrl)
+        {
+            var parts = srcUrl.Split(".");
+            return parts[^1];
         }
     }
 }
