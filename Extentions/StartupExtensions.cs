@@ -28,6 +28,12 @@ namespace Infrastructure.Extentions
             return services;
         }
 
+        public static IServiceCollection AddPaymentHandlers(this IServiceCollection services)
+        {
+            services.AddScoped<IZaloPayService, ZaloPayService>();
+            return services;
+        }
+
         public static IServiceCollection AddCompanyDb(this IServiceCollection services)
         {
             services.AddScoped<ILogRepository, LogRepository>();
