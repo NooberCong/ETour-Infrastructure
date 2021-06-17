@@ -27,7 +27,8 @@ namespace Infrastructure.InterfaceImpls
             param.Add("appid", _appid);
             param.Add("appuser", booking.Author.Name);
             param.Add("apptime", Utils.GetTimeStamp().ToString());
-            param.Add("amount", amount.ToString());
+            // Quick hack to convert to VND :))
+            param.Add("amount", Math.Ceiling(amount * 23193d).ToString());
             param.Add("apptransid", DateTime.Now.ToString("yyMMdd") + "_" + transid);
             param.Add("embeddata", JsonConvert.SerializeObject(embeddata));
             param.Add("item", JsonConvert.SerializeObject(items));
