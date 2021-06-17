@@ -16,7 +16,7 @@ namespace Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.6")
+                .HasAnnotation("ProductVersion", "5.0.7")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Core.Entities.Answer", b =>
@@ -82,12 +82,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTime?>("DateDeposited")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("DepositPaymentType")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("FullPaymentType")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
