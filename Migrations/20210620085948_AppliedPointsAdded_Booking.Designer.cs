@@ -4,14 +4,16 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ETourDbContext))]
-    partial class ETourDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210620085948_AppliedPointsAdded_Booking")]
+    partial class AppliedPointsAdded_Booking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,9 +85,6 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime?>("DateDeposited")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal?>("Deposit")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
 
@@ -99,11 +98,8 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime?>("PaymentDeadline")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("PointsApplied")
+                    b.Property<int>("PointsApplied")
                         .HasColumnType("int");
-
-                    b.Property<decimal?>("Refunded")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
