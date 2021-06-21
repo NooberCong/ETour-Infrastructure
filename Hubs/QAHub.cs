@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Hubs
 {
+    [AllowAnonymous]
     public class QAHub : Hub
     {
         public async Task sendQuestions(string content, string date)
