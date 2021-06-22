@@ -4,19 +4,21 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ETourDbContext))]
-    partial class ETourDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210620154551_DepositAndRefundedAdded_Booking")]
+    partial class DepositAndRefundedAdded_Booking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.7")
+                .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Core.Entities.Answer", b =>
@@ -83,12 +85,9 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime?>("DateDeposited")
                         .HasColumnType("datetime2");
 
-<<<<<<< HEAD
-=======
                     b.Property<decimal?>("Deposit")
                         .HasColumnType("decimal(18,2)");
 
->>>>>>> master
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
 

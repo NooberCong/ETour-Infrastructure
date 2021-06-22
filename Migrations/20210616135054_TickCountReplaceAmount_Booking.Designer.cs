@@ -4,19 +4,21 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ETourDbContext))]
-    partial class ETourDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210616135054_TickCountReplaceAmount_Booking")]
+    partial class TickCountReplaceAmount_Booking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.7")
+                .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Core.Entities.Answer", b =>
@@ -83,12 +85,6 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime?>("DateDeposited")
                         .HasColumnType("datetime2");
 
-<<<<<<< HEAD
-=======
-                    b.Property<decimal?>("Deposit")
-                        .HasColumnType("decimal(18,2)");
-
->>>>>>> master
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
 
@@ -101,12 +97,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTime?>("PaymentDeadline")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("PointsApplied")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("Refunded")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -346,9 +336,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
@@ -360,9 +348,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
