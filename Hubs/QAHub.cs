@@ -15,8 +15,7 @@ namespace Infrastructure.Hubs
                 Content = content,
             };
 
-            await Clients.All.SendAsync("ReceiveQuestion", 
-                question.Content);
+            await Clients.All.SendAsync("ReceiveQuestion", question.Content);
         }
 
     }
