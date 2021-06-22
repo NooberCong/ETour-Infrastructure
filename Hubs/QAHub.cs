@@ -8,17 +8,14 @@ namespace Infrastructure.Hubs
     [AllowAnonymous]
     public class QAHub : Hub
     {
-        public async Task sendQuestions(string content, string date)
+        public async Task SendQuestions(string content)
         {
             var question = new Question
             {
                 Content = content,
             };
 
-            await Clients.All.SendAsync("ReceiveQuestion", 
-                question.Content,
-                date
-                );
+            await Clients.All.SendAsync("ReceiveQuestion", question.Content);
         }
 
     }
