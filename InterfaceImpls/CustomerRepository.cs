@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,11 @@ namespace Infrastructure.InterfaceImpls
             return await _dbContext.Customers.FindAsync(key);
         }
 
+        public void Follow(Customer customer, Tour tour)
+        {
+            _dbContext.Entry(new TourFollowing { Customer = customer, Tour = tour }).State = EntityState.Added;
+        }
+
         public int PageCount(int pageSize)
         {
             return (int)Math.Ceiling((decimal)_dbContext.Customers.Count() / pageSize);
@@ -59,6 +65,17 @@ namespace Infrastructure.InterfaceImpls
         public IEnumerable<Customer> QueryPaged(int pageNumber, int pageSize)
         {
             return _dbContext.Customers.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
+        }
+
+        public void UnFollow(Customer customer, Tour tour)
+        {
+            foreach (var tourFollowing in customer.TourFollowings)
+            {
+                if (tourFollowing.TourID == tour.ID)
+                {
+                    _dbContext.Entry(tourFollowing).State = EntityState.Deleted;
+                }
+            }
         }
 
         public Task<Customer> UpdateAsync(Customer entity)
