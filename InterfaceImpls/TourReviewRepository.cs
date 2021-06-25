@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructure.InterfaceImpls
@@ -18,7 +17,7 @@ namespace Infrastructure.InterfaceImpls
             _dbContext = dbContext;
         }
 
-        public IQueryable<TourReview> Queryable => _dbContext.Reviews.AsQueryable();
+        public IQueryable<TourReview> Queryable => _dbContext.Reviews;
 
         public async Task<TourReview> AddAsync(TourReview entity)
         {
@@ -32,29 +31,9 @@ namespace Infrastructure.InterfaceImpls
             return Task.FromResult(entity);
         }
 
-        public int PageCount(int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)_dbContext.Reviews.Count() / pageSize);
-        }
-
-        public int PageCount(Expression<Func<TourReview, bool>> filterExpression, int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)_dbContext.Reviews.Where(filterExpression).Count() / pageSize);
-        }
-
         public IEnumerable<TourReview> QueryFiltered(Expression<Func<TourReview, bool>> filterExpression)
         {
             return _dbContext.Reviews.Where(filterExpression).ToArray();
-        }
-
-        public IEnumerable<TourReview> QueryFilteredPaged(Expression<Func<TourReview, bool>> filterExpression, int pageNumber, int pageSize)
-        {
-            return _dbContext.Reviews.Where(filterExpression).Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
-        }
-
-        public IEnumerable<TourReview> QueryPaged(int pageNumber, int pageSize)
-        {
-            return _dbContext.Reviews.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
         }
     }
 }

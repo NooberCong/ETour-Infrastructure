@@ -4,14 +4,16 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ETourDbContext))]
-    partial class ETourDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210624083619_InvoiceBookingRefAdded")]
+    partial class InvoiceBookingRefAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,8 +104,8 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("PointsApplied")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Refunded")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("Refunded")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -246,12 +248,17 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("OwnerID")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
                     b.HasIndex("BookingID");
+
+                    b.HasIndex("OwnerID");
 
                     b.ToTable("Invoices");
                 });
@@ -842,7 +849,13 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Core.Entities.Customer", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerID");
+
                     b.Navigation("Booking");
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Core.Entities.Itinerary", b =>

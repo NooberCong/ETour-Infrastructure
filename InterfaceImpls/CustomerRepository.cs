@@ -18,7 +18,7 @@ namespace Infrastructure.InterfaceImpls
             _dbContext = dbContext;
         }
 
-        public IQueryable<Customer> Queryable => _dbContext.Customers.AsQueryable();
+        public IQueryable<Customer> Queryable => _dbContext.Customers;
 
         public async Task<Customer> AddAsync(Customer entity)
         {
@@ -42,29 +42,9 @@ namespace Infrastructure.InterfaceImpls
             _dbContext.Entry(new TourFollowing { Customer = customer, Tour = tour }).State = EntityState.Added;
         }
 
-        public int PageCount(int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)_dbContext.Customers.Count() / pageSize);
-        }
-
-        public int PageCount(Expression<Func<Customer, bool>> filterExpression, int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)_dbContext.Customers.Where(filterExpression).Count() / pageSize);
-        }
-
         public IEnumerable<Customer> QueryFiltered(Expression<Func<Customer, bool>> filterExpression)
         {
             return _dbContext.Customers.Where(filterExpression).ToArray();
-        }
-
-        public IEnumerable<Customer> QueryFilteredPaged(Expression<Func<Customer, bool>> filterExpression, int pageNumber, int pageSize)
-        {
-            return _dbContext.Customers.Where(filterExpression).Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
-        }
-
-        public IEnumerable<Customer> QueryPaged(int pageNumber, int pageSize)
-        {
-            return _dbContext.Customers.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
         }
 
         public void UnFollow(Customer customer, Tour tour)

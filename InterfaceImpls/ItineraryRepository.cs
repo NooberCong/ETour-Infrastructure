@@ -24,7 +24,7 @@ namespace Infrastructure.InterfaceImpls
             _doc = doc;
         }
 
-        public IQueryable<Itinerary> Queryable => _dbContext.Itineraries.AsQueryable();
+        public IQueryable<Itinerary> Queryable => _dbContext.Itineraries;
 
         public async Task<Itinerary> AddAsync(Itinerary entity)
         {

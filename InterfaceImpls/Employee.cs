@@ -13,7 +13,7 @@ namespace Infrastructure.InterfaceImpls
         [NotMapped]
         public string ID { get => Id; set => Id = value; }
         [NotMapped]
-        List<IRole> IEmployee.Roles { get; set; }
+        List<IRole> IEmployee.Roles { get; set; } = new List<IRole>();
         public string FullName { get; set; }
         [DataType(DataType.Date)]
         public DateTime DOB { get; set; }

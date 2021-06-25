@@ -25,7 +25,7 @@ namespace Infrastructure.InterfaceImpls
             var param = new Dictionary<string, string>();
 
             param.Add("appid", _appid);
-            param.Add("appuser", booking.Author.Name);
+            param.Add("appuser", booking.Owner.Name);
             param.Add("apptime", Utils.GetTimeStamp().ToString());
             // Quick hack to convert to VND :))
             param.Add("amount", Math.Ceiling(amount * 23193d).ToString());

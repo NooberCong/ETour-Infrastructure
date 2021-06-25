@@ -16,8 +16,8 @@ namespace Infrastructure.InterfaceImpls
         public int ID { get; set; }
         public bool IsSoftDeleted { get; set; }
         public DateTime LastUpdated { get; set; }
-        public Employee Author { get; set; }
-        public string AuthorID { get; set; }
+        public Employee Owner { get; set; }
+        public string OwnerID { get; set; }
         public List<string> ImageUrls { get; set; } = new();
         public IPost<Employee>.PostCategory Category { get; set; }
         public List<string> Tags { get; set; } = new();

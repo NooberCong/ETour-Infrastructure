@@ -23,7 +23,7 @@ namespace Infrastructure.InterfaceImpls
             _doc = doc;
         }
 
-        public IQueryable<Post> Queryable => _dbContext.Posts.AsQueryable();
+        public IQueryable<Post> Queryable => _dbContext.Posts;
 
         public async Task<Post> AddAsync(Post post, IFormFile coverImg)
         {
@@ -49,26 +49,6 @@ namespace Infrastructure.InterfaceImpls
         public async Task<Post> FindAsync(int key)
         {
             return await _dbContext.Posts.FindAsync(key);
-        }
-
-        public int PageCount(int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)_dbContext.Posts.Count() / pageSize);
-        }
-
-        public int PageCount(Expression<Func<Post, bool>> filterExpression, int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)_dbContext.Posts.Where(filterExpression).Count() / pageSize);
-        }
-
-        public IEnumerable<Post> QueryFiltered(Expression<Func<Post, bool>> filterExpression)
-        {
-            return _dbContext.Posts.Where(filterExpression).ToArray();
-        }
-
-        public IEnumerable<Post> QueryFilteredPaged(Expression<Func<Post, bool>> filterExpression, int pageNumber, int pageSize)
-        {
-            return _dbContext.Posts.Where(filterExpression).Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
         }
 
         public IEnumerable<Post> QueryPaged(int pageNumber, int pageSize)

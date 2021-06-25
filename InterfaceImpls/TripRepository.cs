@@ -18,7 +18,7 @@ namespace Infrastructure.InterfaceImpls
             _dbContext = dbContext;
         }
 
-        public IQueryable<Trip> Queryable => _dbContext.Trips.AsQueryable();
+        public IQueryable<Trip> Queryable => _dbContext.Trips;
 
         public async Task<Trip> AddAsync(Trip trip, int[] discountIDs)
         {
@@ -36,29 +36,9 @@ namespace Infrastructure.InterfaceImpls
             return await _dbContext.Trips.FindAsync(key);
         }
 
-        public int PageCount(int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)_dbContext.Trips.Count() / pageSize);
-        }
-
-        public int PageCount(Expression<Func<Trip, bool>> filterExpression, int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)_dbContext.Trips.Where(filterExpression).Count() / pageSize);
-        }
-
         public IEnumerable<Trip> QueryFiltered(Expression<Func<Trip, bool>> filterExpression)
         {
             return _dbContext.Trips.Where(filterExpression).ToArray();
-        }
-
-        public IEnumerable<Trip> QueryFilteredPaged(Expression<Func<Trip, bool>> filterExpression, int pageNumber, int pageSize)
-        {
-            return _dbContext.Trips.Where(filterExpression).Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
-        }
-
-        public IEnumerable<Trip> QueryPaged(int pageNumber, int pageSize)
-        {
-            return _dbContext.Trips.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
         }
 
         public Task<Trip> UpdateAsync(Trip entity)

@@ -21,6 +21,7 @@ namespace Infrastructure.Extentions
             services.AddScoped<IAnswerRepository, AnswerRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ITourReviewRepository, TourReviewRepository>();
+            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRemoteFileStorageHandler, RemoteFileStorageHandler>();
             services.AddTransient<HtmlDocument>();
