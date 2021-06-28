@@ -26,6 +26,11 @@ namespace Infrastructure.InterfaceImpls
             return entity;
         }
 
+        public void AddPointLog(PointLog pointLog)
+        {
+            _dbContext.PointLogs.Add(pointLog);
+        }
+
         public Task<Customer> DeleteAsync(Customer entity)
         {
             _dbContext.Customers.Remove(entity);
@@ -40,6 +45,11 @@ namespace Infrastructure.InterfaceImpls
         public void Follow(Customer customer, Tour tour)
         {
             _dbContext.Entry(new TourFollowing { Customer = customer, Tour = tour }).State = EntityState.Added;
+        }
+
+        public IEnumerable<PointLog> GetPointsLogs(Customer customer)
+        {
+            return _dbContext.PointLogs.Where(pl => pl.OwnerID == customer.ID).AsEnumerable();
         }
 
         public IEnumerable<Customer> QueryFiltered(Expression<Func<Customer, bool>> filterExpression)

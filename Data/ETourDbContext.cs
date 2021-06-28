@@ -23,6 +23,7 @@ namespace Infrastructure
         public DbSet<Log> Logs { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<PointLog> PointLogs { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
