@@ -32,6 +32,7 @@ namespace Infrastructure.Extentions
         public static IServiceCollection AddPaymentHandlers(this IServiceCollection services)
         {
             services.AddScoped<IZaloPayService, ZaloPayService>();
+            services.AddScoped<IMomoPaymentService, MomoPaymentService>();
             return services;
         }
 
