@@ -18,7 +18,7 @@ namespace Infrastructure.InterfaceImpls
             _dbContext = dbContext;
         }
 
-        public IQueryable<Question> Queryable => _dbContext.Questions.AsQueryable();
+        public IQueryable<Question> Queryable => _dbContext.Questions;
 
         public async Task<Question> AddAsync(Question entity)
         {
@@ -32,29 +32,9 @@ namespace Infrastructure.InterfaceImpls
             return Task.FromResult(entity);
         }
 
-        public int PageCount(int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)_dbContext.Questions.Count() / pageSize);
-        }
-
-        public int PageCount(Expression<Func<Question, bool>> filterExpression, int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)_dbContext.Questions.Where(filterExpression).Count() / pageSize);
-        }
-
         public IEnumerable<Question> QueryFiltered(Expression<Func<Question, bool>> filterExpression)
         {
             return _dbContext.Questions.Where(filterExpression).ToArray();
-        }
-
-        public IEnumerable<Question> QueryFilteredPaged(Expression<Func<Question, bool>> filterExpression, int pageNumber, int pageSize)
-        {
-            return _dbContext.Questions.Where(filterExpression).Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
-        }
-
-        public IEnumerable<Question> QueryPaged(int pageNumber, int pageSize)
-        {
-            return _dbContext.Questions.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
         }
 
         public Task<Question> UpdateAsync(Question entity)

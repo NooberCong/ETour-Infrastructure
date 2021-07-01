@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Infrastructure
@@ -23,6 +22,8 @@ namespace Infrastructure
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<Log> Logs { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<PointLog> PointLogs { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -54,23 +55,23 @@ namespace Infrastructure
                 );
 
             modelBuilder.Entity<Booking>()
-                .Property(booking => booking.AuthorID)
+                .Property(booking => booking.OwnerID)
                 .IsRequired();
 
             modelBuilder.Entity<Post>()
-                .Property(post => post.AuthorID)
+                .Property(post => post.OwnerID)
                 .IsRequired();
 
             modelBuilder.Entity<Question>()
-                .Property(question => question.AuthorID)
+                .Property(question => question.OwnerID)
                 .IsRequired();
 
             modelBuilder.Entity<PointLog>()
-                .Property(plog => plog.AuthorID)
+                .Property(plog => plog.OwnerID)
                 .IsRequired();
 
             modelBuilder.Entity<TourReview>()
-                .Property(review => review.AuthorID)
+                .Property(review => review.OwnerID)
                 .IsRequired();
 
             modelBuilder.Entity<Itinerary>()

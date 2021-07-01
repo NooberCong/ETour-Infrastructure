@@ -19,7 +19,14 @@ namespace Infrastructure.InterfaceImpls
             _roleManager = roleManager;
         }
 
-        public IQueryable<Employee> Queryable => _dbContext.Users;
+        public IQueryable<Employee> Queryable
+        {
+            get {
+                var employees = _dbContext.Users.AsEnumerable();
+                SetRoles(employees);
+                return employees.AsQueryable();
+            }
+        }
 
         public async Task<Employee> FindAsync(string key)
         {
@@ -28,12 +35,12 @@ namespace Infrastructure.InterfaceImpls
 
             if (employee != null)
             {
-                ((IEmployee)employee).Roles = await GetUserRoles(employee);
+                ((IEmployee)employee).Roles.AddRange(await GetRolesFor(employee));
             }
             return employee;
         }
 
-        private async Task<List<IRole>> GetUserRoles(Employee employee)
+        private async Task<IEnumerable<IRole>> GetRolesFor(Employee employee)
         {
             List<IRole> roles = new();
             foreach (var empRole in _dbContext.UserRoles.Where(ur => ur.UserId == employee.ID))
@@ -57,9 +64,9 @@ namespace Infrastructure.InterfaceImpls
         {
             foreach (var emp in employees)
             {
-                var empRoles = GetUserRoles(emp);
+                var empRoles = GetRolesFor(emp);
                 empRoles.Wait();
-                ((IEmployee)emp).Roles = empRoles.Result;
+                ((IEmployee)emp).Roles.AddRange(empRoles.Result);
             }
         }
 

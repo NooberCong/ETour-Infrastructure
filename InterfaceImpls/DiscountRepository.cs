@@ -19,7 +19,7 @@ namespace Infrastructure.InterfaceImpls
             _dbContext = dbContext;
         }
 
-        public IQueryable<Discount> Queryable => _dbContext.Discounts.AsQueryable();
+        public IQueryable<Discount> Queryable => _dbContext.Discounts;
 
         public async Task<Discount> AddAsync(Discount entity)
         {
@@ -38,29 +38,9 @@ namespace Infrastructure.InterfaceImpls
             return await _dbContext.Discounts.FindAsync(key);
         }
 
-        public int PageCount(int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)_dbContext.Discounts.Count() / pageSize);
-        }
-
-        public int PageCount(Expression<Func<Discount, bool>> filterExpression, int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)_dbContext.Discounts.Where(filterExpression).Count() / pageSize);
-        }
-
         public IEnumerable<Discount> QueryFiltered(Expression<Func<Discount, bool>> filterExpression)
         {
             return _dbContext.Discounts.Where(filterExpression).ToArray();
-        }
-
-        public IEnumerable<Discount> QueryFilteredPaged(Expression<Func<Discount, bool>> filterExpression, int pageNumber, int pageSize)
-        {
-            return _dbContext.Discounts.Where(filterExpression).Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
-        }
-
-        public IEnumerable<Discount> QueryPaged(int pageNumber, int pageSize)
-        {
-            return _dbContext.Discounts.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
         }
 
         public Task<Discount> UpdateAsync(Discount entity)

@@ -21,7 +21,7 @@ namespace Infrastructure.InterfaceImpls
             _remoteFileStorageHandler = remoteFileStorageHandler;
         }
 
-        public IQueryable<Tour> Queryable => _dbContext.Tours.AsQueryable();
+        public IQueryable<Tour> Queryable => _dbContext.Tours;
 
         public async Task<Tour> AddAsync(Tour tour, IFormFileCollection images)
         {
@@ -49,31 +49,10 @@ namespace Infrastructure.InterfaceImpls
             return await _dbContext.Tours.FindAsync(key);
         }
 
-        public int PageCount(int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)_dbContext.Tours.Count() / pageSize);
-        }
-
-        public int PageCount(Expression<Func<Tour, bool>> filterExpression, int pageSize)
-        {
-            return (int)Math.Ceiling((decimal)_dbContext.Tours.Where(filterExpression).Count() / pageSize);
-        }
-
         public IEnumerable<Tour> QueryFiltered(Expression<Func<Tour, bool>> filterExpression)
         {
             return _dbContext.Tours.Where(filterExpression).ToArray();
         }
-
-        public IEnumerable<Tour> QueryFilteredPaged(Expression<Func<Tour, bool>> filterExpression, int pageNumber, int pageSize)
-        {
-            return _dbContext.Tours.Where(filterExpression).Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
-        }
-
-        public IEnumerable<Tour> QueryPaged(int pageNumber, int pageSize)
-        {
-            return _dbContext.Tours.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToArray();
-        }
-
 
         public async Task<Tour> UpdateAsync(Tour tour, IFormFileCollection images)
         {
