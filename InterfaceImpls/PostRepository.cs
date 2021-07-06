@@ -1,4 +1,5 @@
-﻿using Core.Interfaces;
+﻿using Core.Entities;
+using Core.Interfaces;
 using HtmlAgilityPack;
 using Infrastructure.Extentions;
 using Microsoft.AspNetCore.Http;
@@ -44,6 +45,11 @@ namespace Infrastructure.InterfaceImpls
             await _dbContext.Posts.AddAsync(post);
 
             return post;
+        }
+
+        public async Task AddComment(Comment comment)
+        {
+            await _dbContext.Comments.AddAsync(comment);
         }
 
         public async Task<Post> FindAsync(int key)

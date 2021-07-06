@@ -4,14 +4,16 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ETourDbContext))]
-    partial class ETourDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210702011757_ReviewRefBooking_CommentRefCustomer")]
+    partial class ReviewRefBooking_CommentRefCustomer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,9 +136,7 @@ namespace Infrastructure.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
@@ -153,7 +153,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PostID");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("Core.Entities.Customer", b =>
@@ -506,6 +506,9 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
+                    b.Property<string>("CustomerID")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
 
@@ -516,6 +519,8 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("BookingID")
                         .IsUnique();
+
+                    b.HasIndex("CustomerID");
 
                     b.ToTable("Reviews");
                 });
@@ -539,9 +544,6 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("IsOpen")
                         .HasColumnType("bit");
 
-                    b.Property<string>("OwnerID")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -555,8 +557,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("OwnerID");
 
                     b.HasIndex("TourID");
 
@@ -948,7 +948,7 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Core.Entities.Tour", "Tour")
-                        .WithMany("Followings")
+                        .WithMany()
                         .HasForeignKey("TourID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -966,15 +966,15 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Core.Entities.Customer", null)
+                        .WithMany("Reviews")
+                        .HasForeignKey("CustomerID");
+
                     b.Navigation("Booking");
                 });
 
             modelBuilder.Entity("Core.Entities.Trip", b =>
                 {
-                    b.HasOne("Infrastructure.InterfaceImpls.Employee", null)
-                        .WithMany("Trips")
-                        .HasForeignKey("OwnerID");
-
                     b.HasOne("Core.Entities.Tour", "Tour")
                         .WithMany("Trips")
                         .HasForeignKey("TourID")
@@ -1078,6 +1078,8 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("PointLogs");
 
+                    b.Navigation("Reviews");
+
                     b.Navigation("TourFollowings");
                 });
 
@@ -1093,8 +1095,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Tour", b =>
                 {
-                    b.Navigation("Followings");
-
                     b.Navigation("Trips");
                 });
 
@@ -1105,11 +1105,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Itineraries");
 
                     b.Navigation("TripDiscounts");
-                });
-
-            modelBuilder.Entity("Infrastructure.InterfaceImpls.Employee", b =>
-                {
-                    b.Navigation("Trips");
                 });
 
             modelBuilder.Entity("Infrastructure.InterfaceImpls.Post", b =>

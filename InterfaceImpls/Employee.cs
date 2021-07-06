@@ -1,4 +1,5 @@
-﻿using Core.Interfaces;
+﻿using Core.Entities;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -20,20 +21,7 @@ namespace Infrastructure.InterfaceImpls
         [DataType(DataType.Date)]
         public DateTime StartWork { get; set; }
         public bool IsSoftDeleted { get; set; }
-        public void ValidateNewRoles(string[] roleIds)
-        {
-            var isAdmin = ((IEmployee)this).Roles.Any(r => r.ID == IRole.ADMIN_ID);
-
-            // Prevent overposting
-            if (!isAdmin && roleIds.Contains(IRole.ADMIN_ID) || isAdmin && !roleIds.Contains(IRole.ADMIN_ID))
-            {
-                throw new Exception("Invalid role assignment");
-            }
-        }
-
-        public bool IsAdmin()
-        {
-            return ((IEmployee)this).Roles.Any(r => r.ID == IRole.ADMIN_ID);
-        }
+        [ForeignKey("OwnerID")]
+        public ICollection<Trip> Trips { get; set; } = new List<Trip>();
     }
 }

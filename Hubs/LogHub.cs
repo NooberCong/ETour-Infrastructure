@@ -1,9 +1,11 @@
 ﻿using Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Hubs
 {
+    [Authorize(Roles = "Admin")]
     public class LogHub : Hub
     {
         public async Task Subscribe(string TypeOrdinal)

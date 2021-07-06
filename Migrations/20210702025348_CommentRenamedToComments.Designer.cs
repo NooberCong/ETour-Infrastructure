@@ -4,14 +4,16 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ETourDbContext))]
-    partial class ETourDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210702025348_CommentRenamedToComments")]
+    partial class CommentRenamedToComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -539,9 +541,6 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("IsOpen")
                         .HasColumnType("bit");
 
-                    b.Property<string>("OwnerID")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -555,8 +554,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("OwnerID");
 
                     b.HasIndex("TourID");
 
@@ -948,7 +945,7 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Core.Entities.Tour", "Tour")
-                        .WithMany("Followings")
+                        .WithMany()
                         .HasForeignKey("TourID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -971,10 +968,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Trip", b =>
                 {
-                    b.HasOne("Infrastructure.InterfaceImpls.Employee", null)
-                        .WithMany("Trips")
-                        .HasForeignKey("OwnerID");
-
                     b.HasOne("Core.Entities.Tour", "Tour")
                         .WithMany("Trips")
                         .HasForeignKey("TourID")
@@ -1093,8 +1086,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Tour", b =>
                 {
-                    b.Navigation("Followings");
-
                     b.Navigation("Trips");
                 });
 
@@ -1105,11 +1096,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Itineraries");
 
                     b.Navigation("TripDiscounts");
-                });
-
-            modelBuilder.Entity("Infrastructure.InterfaceImpls.Employee", b =>
-                {
-                    b.Navigation("Trips");
                 });
 
             modelBuilder.Entity("Infrastructure.InterfaceImpls.Post", b =>
