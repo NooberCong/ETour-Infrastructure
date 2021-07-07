@@ -24,6 +24,7 @@ namespace Infrastructure
         public DbSet<Post> Posts { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<PointLog> PointLogs { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -68,10 +69,6 @@ namespace Infrastructure
 
             modelBuilder.Entity<PointLog>()
                 .Property(plog => plog.OwnerID)
-                .IsRequired();
-
-            modelBuilder.Entity<TourReview>()
-                .Property(review => review.OwnerID)
                 .IsRequired();
 
             modelBuilder.Entity<Itinerary>()

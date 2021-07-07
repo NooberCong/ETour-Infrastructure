@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace Infrastructure.InterfaceImpls
@@ -21,6 +20,8 @@ namespace Infrastructure.InterfaceImpls
         public List<string> ImageUrls { get; set; } = new();
         public IPost<Employee>.PostCategory Category { get; set; }
         public List<string> Tags { get; set; } = new();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
         public IEnumerable<string> GetUnusedImageUrls(List<string> newUrls)
         {
             return ImageUrls.Where(url => !newUrls.Contains(url));

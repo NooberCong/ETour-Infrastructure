@@ -10,6 +10,7 @@ namespace Infrastructure.InterfaceImpls
 {
     public class EmailComposer : IEmailComposer
     {
+
         public string ComposeBookingCancelation(Booking booking)
         {
             throw new NotImplementedException();
@@ -403,6 +404,263 @@ namespace Infrastructure.InterfaceImpls
         public string ComposeResetPassword(string name, string confirmUrl)
         {
             throw new NotImplementedException();
+        }
+
+        public string ComposeTripPromotion(Trip trip, string detailUrl, string bookingUrl)
+        {
+
+            String body = "<link" +
+            "  href=\"https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700\"" +
+            "  rel=\"stylesheet\"" +
+            "/>" +
+            "<link" +
+            "  href=\"https://fonts.googleapis.com/css?family=Quicksand:300,400,700\"" +
+            "  rel=\"stylesheet\"" +
+            "/>" +
+            "" +
+            "<style type=\"text/css\">" +
+            "  .style-1 del {" +
+            "    color: rgba(255, 0, 0, 0.5);" +
+            "    text-decoration: none;" +
+            "    position: relative;" +
+            "  }" +
+            "  .style-1 del:before {" +
+            "    content: \" \";" +
+            "    display: block;" +
+            "    width: 100%;" +
+            "    border-top: 2px solid rgba(255, 0, 0, 0.8);" +
+            "    height: 12px;" +
+            "    position: absolute;" +
+            "    bottom: 0;" +
+            "    left: 0;" +
+            "    transform: rotate(-7deg);" +
+            "  }" +
+            "  .style-1 ins {" +
+            "    color: green;" +
+            "    font-size: 32px;" +
+            "    text-decoration: none;" +
+            "    padding: 1em 1em 1em 0.5em;" +
+            "  }" +
+            "</style>" +
+            "<!-- [if gte mso 9]><style type=”text/css”>" +
+            "        body {" +
+            "        font-family: arial, sans-serif!important;" +
+            "        }" +
+            "        </style>" +
+            "    <![endif]-->" +
+            "" +
+            "<!-- big image section -->" +
+            "<table" +
+            "  border=\"0\"" +
+            "  width=\"100%\"" +
+            "  cellpadding=\"0\"" +
+            "  cellspacing=\"0\"" +
+            "  bgcolor=\"ffffff\"" +
+            "  class=\"bg_color\"" +
+            ">" +
+            "  <tr>" +
+            "    <td align=\"center\">" +
+            "      <table" +
+            "        border=\"0\"" +
+            "        align=\"center\"" +
+            "        width=\"590\"" +
+            "        cellpadding=\"0\"" +
+            "        cellspacing=\"0\"" +
+            "        class=\"container590\"" +
+            "      >" +
+            "        <tr>" +
+            "          <td align=\"center\" class=\"section-img\">" +
+            "            <a" +
+            "              href=\"\"" +
+            "              style=\"" +
+            "                border-style: none !important;" +
+            "                display: block;" +
+            "                border: 0 !important;" +
+            "              \"" +
+            "              ><img" +
+            $"                src=\"{trip.Tour.ImageUrls[0]}\"" +
+            "                style=\"display: block; width: 590px\"" +
+            "                width=\"590\"" +
+            "                border=\"0\"" +
+            "                alt=\"\"" +
+            "            /></a>" +
+            "          </td>" +
+            "        </tr>" +
+            "        <tr>" +
+            "          <td height=\"20\" style=\"font-size: 20px; line-height: 20px\"> </td>" +
+            "        </tr>" +
+            "        <tr>" +
+            "          <td" +
+            "            align=\"center\"" +
+            "            style=\"" +
+            "              color: #343434;" +
+            "              font-size: 24px;" +
+            "              font-family: Quicksand, Calibri, sans-serif;" +
+            "              font-weight: 700;" +
+            "              letter-spacing: 3px;" +
+            "              line-height: 35px;" +
+            "            \"" +
+            "            class=\"main-header\"" +
+            "          >" +
+            "            <div style=\"line-height: 35px\">" +
+            "              NEW TRIP FOR" +
+            $"              <span style=\"color: #5caad2\">{trip.Tour.Title}</span>" +
+            "            </div>" +
+            "          </td>" +
+            "        </tr>" +
+            "        <tr>" +
+            "          <td height=\"10\" style=\"font-size: 10px; line-height: 10px\"> </td>" +
+            "        </tr>" +
+            "" +
+            "        <tr>" +
+            "          <td align=\"center\">" +
+            "            <table" +
+            "              border=\"0\"" +
+            "              width=\"40\"" +
+            "              align=\"center\"" +
+            "              cellpadding=\"0\"" +
+            "              cellspacing=\"0\"" +
+            "              bgcolor=\"eeeeee\"" +
+            "            >" +
+            "              <tr>" +
+            "                <td height=\"2\" style=\"font-size: 2px; line-height: 2px\">" +
+            "                   " +
+            "                </td>" +
+            "              </tr>" +
+            "            </table>" +
+            "          </td>" +
+            "        </tr>" +
+            "" +
+            "        <tr>" +
+            "          <td height=\"20\" style=\"font-size: 20px; line-height: 20px\"> </td>" +
+            "        </tr>" +
+            "" +
+            "        <tr>" +
+            "          <td align=\"center\">" +
+            "            <table" +
+            "              border=\"0\"" +
+            "              width=\"400\"" +
+            "              align=\"center\"" +
+            "              cellpadding=\"0\"" +
+            "              cellspacing=\"0\"" +
+            "              class=\"container590\"" +
+            "            >" +
+            "              <tr>" +
+            "                <td" +
+            "                  align=\"center\"" +
+            "                  style=\"" +
+            "                    color: #888888;" +
+            "                    font-size: 16px;" +
+            "                    font-family: 'Work Sans', Calibri, sans-serif;" +
+            "                    line-height: 24px;" +
+            "                  \"" +
+            "                >" +
+            "                  <!-- style 1 -->" +
+            "                  <div class=\"style-1\" style=\"margin-bottom: 1rem\">" +
+            "                    <del>" +
+            $"                      <span class=\"amount\">${trip.Price}</span>" +
+            "                    </del>" +
+            "                    <ins>" +
+            $"                      <span class=\"amount\">{trip.GetSalePrice().ToString("C")}</span>" +
+            "                    </ins>" +
+            "                  </div>" +
+            "                  <div style=\"line-height: 24px\">" +
+            $"                    <p>Open slots: {trip.Vacancies}</p>" +
+            $"                    <p>Start place: <span>{trip.Tour.StartPlace}</span></p>" +
+            $"                    <p>Destination: <span>{trip.Tour.Destination}</span></p>" +
+            $"                    <p>Time Frame: {trip.StartTime.ToString("dd/MM/yyyy")} - {trip.EndTime.ToString("dd/MM/yyyy")}</p>" +
+            "                  </div>" +
+            "                </td>" +
+            "              </tr>" +
+            "            </table>" +
+            "          </td>" +
+            "        </tr>" +
+            "" +
+            "        <tr>" +
+            "          <td height=\"25\" style=\"font-size: 25px; line-height: 25px\"> </td>" +
+            "        </tr>" +
+            "" +
+            "        <tr>" +
+            "          <td align=\"center\">" +
+            "            <table" +
+            "              border=\"0\"" +
+            "              align=\"center\"" +
+            "              width=\"300\"" +
+            "              cellpadding=\"0\"" +
+            "              cellspacing=\"0\"" +
+            "              style=\"\"" +
+            "            >" +
+            "              <tr>" +
+            "                <td height=\"10\" style=\"font-size: 10px; line-height: 10px\">" +
+            "                   " +
+            "                </td>" +
+            "              </tr>" +
+            "" +
+            "              <tr style=\"display: flex; justify-content: center\">" +
+            "                <td" +
+            "                  align=\"center\"" +
+            "                  style=\"" +
+            "                    color: #ffffff;" +
+            "                    font-size: 14px;" +
+            "                    margin-right: 1rem;" +
+            "                    font-family: 'Work Sans', Calibri, sans-serif;" +
+            "                    line-height: 26px;" +
+            "                  \"" +
+            "                >" +
+            "                  <div" +
+            "                    style=\"" +
+            "                      line-height: 26px;" +
+            "                      background-color: #5caad2;" +
+            "                      padding: 1rem;" +
+            "                      text-align: center;" +
+            "                      width: 6rem;" +
+            "                    \"" +
+            "                  >" +
+            $"                    <a href=\"{detailUrl}\" style=\"color: #ffffff; text-decoration: none\"" +
+            "                      >DETAILS</a" +
+            "                    >" +
+            "                  </div>" +
+            "                </td>" +
+            "" +
+            "                <td" +
+            "                  align=\"center\"" +
+            "                  style=\"" +
+            "                    color: #ffffff;" +
+            "                    font-size: 14px;" +
+            "                    font-family: 'Work Sans', Calibri, sans-serif;" +
+            "                    line-height: 26px;" +
+            "                  \"" +
+            "                >" +
+            "                  <div" +
+            "                    style=\"" +
+            "                      line-height: 26px;" +
+            "                      background-color: #dc143c;" +
+            "                      padding: 1rem;" +
+            "                      text-align: center;" +
+            "                      width: 6rem;" +
+            "                    \"" +
+            "                  >" +
+            $"                    <a href=\"{bookingUrl}\" style=\"color: #ffffff; text-decoration: none\"" +
+            "                      >BOOK NOW</a" +
+            "                    >" +
+            "                  </div>" +
+            "                </td>" +
+            "              </tr>" +
+            "" +
+            "              <tr>" +
+            "                <td height=\"10\" style=\"font-size: 10px; line-height: 10px\">" +
+            "                   " +
+            "                </td>" +
+            "              </tr>" +
+            "            </table>" +
+            "          </td>" +
+            "        </tr>" +
+            "      </table>" +
+            "    </td>" +
+            "  </tr>" +
+            "</table>";
+
+            return AddHeaderFooter(body);
         }
 
         private string AddHeaderFooter(string body)

@@ -81,7 +81,7 @@ namespace Infrastructure.InterfaceImpls
         {
             var existingEmployee = await FindAsync(employee.ID);
 
-            existingEmployee.ValidateNewRoles(roleIds);
+            ((IEmployee)existingEmployee).ValidateNewRoles(roleIds);
 
             // Remove old roles
             foreach (var role in _dbContext.UserRoles.Where(ur => ur.UserId == employee.ID))
