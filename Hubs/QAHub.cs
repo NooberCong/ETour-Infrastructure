@@ -30,7 +30,7 @@ namespace Infrastructure.Hubs
             {
                  question = new Question
                 {
-                    Author = customer,
+                    Owner = customer,
                     
                     Title = title,
                     Category = type,
@@ -43,7 +43,7 @@ namespace Infrastructure.Hubs
 
 
             await Clients.All.SendAsync("ReceiveQuestion",
-                question.Author.Name,
+                question.Owner.Name,
                 question.Title,
                 question.Category.ToString(),
                 question.LastUpdated,
