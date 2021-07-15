@@ -46,8 +46,8 @@ namespace Infrastructure.Extentions
 
         public static IServiceCollection AddEmailService(this IServiceCollection services)
         {
-            services.AddTransient<IEmailService, EmailService>();
-            services.AddTransient<IEmailComposer, EmailComposer>();
+            services.AddSingleton<IEmailService, EmailService>();
+            services.AddSingleton<IEmailComposer, EmailComposer>();
             return services;
         }
 
