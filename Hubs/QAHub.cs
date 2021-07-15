@@ -11,7 +11,7 @@ namespace Infrastructure.Hubs
     [AllowAnonymous]
     public class QAHub : Hub
     {
-
+        public static readonly string PATH = "/qa";
         private readonly ICustomerRepository _customerRepository;
         public QAHub(ICustomerRepository customerRepository)
         {
@@ -33,7 +33,7 @@ namespace Infrastructure.Hubs
                     Owner = customer,
                     
                     Title = title,
-                    Category = type,
+                    Category = type.Value,
                     LastUpdated = DateTime.UtcNow,
                     Priority = Question.QuestionPriority.Low,
                     Status = Question.QuestionStatus.Pending

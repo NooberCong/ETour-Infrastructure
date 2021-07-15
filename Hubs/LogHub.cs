@@ -8,6 +8,7 @@ namespace Infrastructure.Hubs
     [Authorize(Roles = "Admin")]
     public class LogHub : Hub
     {
+        public static readonly string PATH = "/logs";
         public async Task Subscribe(string TypeOrdinal)
         {
             Log.LogType? type;
